@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/index.html</title>
+</head>
+<body>
+	<div class="container">
+		<h1>인덱스 페이지입니다.</h1>
+		<ul>
+			<li><a href="/Step01Servlet/friend/list">친구 목록보기</a></li>
+			<li><a href="/Step01Servlet/member/list">회원 목록보기</a></li>
+			<li><a href="/Step01Servlet/friend/list.jsp">친구 목록보기(jsp)</a></li>
+			<li><a href="/Step01Servlet/member/list.jsp">회원 목록보기(jsp)</a></li>
+		</ul>
+		
+		<form action="/Step01Servlet/send" method="get">
+			<input type="text" name="msg" placeholder="서버에 할 말 입력..." />
+			<button type="submit">전송</button>
+		</form>
+	</div>
+</body>
+</html>
