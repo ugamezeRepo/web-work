@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>인덱스 페이지</title>
+</head>
+<body>
+	<div class="container">
+		<h1>인덱스 페이지 입니다.</h1>
+		<p>내 이름은 <strong>김태준</strong></p>
+		
+		<ul>
+			<li><a href="study.html">공부</a></li>
+			<!-- 상대경로 -->
+			<li><a href="sub/game.html">토끼 잡기 게임</a></li>
+			<!-- 
+				서버 내에서의 절대경로
+				context path로 시작되면 서버 내에서의 절대경로가 된다.
+			-->
+			<li><a href="/Hello/sub/game.html">토끼 잡기 게임</a></li>
+			<!-- 웹에서의 절대경로 -->
+			<li><a href="http://localhost:8888/Hello/sub/game.html">토끼 잡기 게임</a></li>
+			<li><a href="fortune">오늘의 운세</a></li>
+			<li><a href="friends">친구목록 보기</a></li>
+		</ul>
+	</div>
+</body>
+</html>

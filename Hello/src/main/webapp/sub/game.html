@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>/game.html</title>
+    <style>
+      canvas {
+        border: 1px solid red;
+      }
+    </style>
+  </head>
+  <body>
+	<!-- 인덱스 페이지로 돌아가는 링크 작성 (상대경로, 절대경로 2가지) -->
+	<ul>
+		<li><a href="../index.html">인덱스 페이지로 돌아가기(상대경로)</a></li>
+		<li><a href="/Hello/index.html">인덱스 페이지로 돌아가기(절대경로)</a></li>
+	</ul>
+    <h1>canvas 요소 활용하기</h1>
+    <!-- canvas 요소는 width와 height를 속성으로 직접 지정할 수 있다. -->
+    <canvas id="myCanvas" width="800" height="500"></canvas>
+
+    <script>
+      // javascript로 canvas 요소에 그림을 그릴 수 있다.
+      // 이미지를 로딩해서 이미지도 원하는 크기로 원하는 위치에 그릴 수도 있다.
+      // 도형, 글자도 출력 가능하다.
+
+      // canvas 참조값
+      const canvas = document.querySelector("#myCanvas");
+      // canvas에 그림을 그릴 도구(context) 객체 얻어내기
+      const context = canvas.getContext("2d");
+
+      // canvas에 그릴 이미지 로딩
+      const snipeImg = new Image();
+      snipeImg.src = "/Hello/images/snipe.png";
+      const holeImg = new Image();
+      holeImg.src = "/Hello/images/hole.png";
+      // 배경 이미지
+      const backImg = new Image();
+      backImg.src = "/Hello/images/background.jpg";
+
+      // snipe의 좌표
+      let x,
+        y,
+        snipeXY = { x, y },
+        holeXY = [{ x, y }];
+
+      // 효과음 로딩
+      const fireSound = new Audio("/Hello/sounds/fire.wav");
+      const pianoSound = new Audio("/Hello/sounds/piano.mp3");
+      const birddie = new Audio("/Hello/sounds/birddie.mp3");
+
+      // 토끼 이미지
+      const rabbitImg = new Image();
+      rabbitImg.src = "/Hello/images/rabbit_1.png";
+      const rabbitImg2 = new Image();
+      rabbitImg2.src = "/Hello/images/rabbit2.png";
+      const rabbitImgs = [rabbitImg, rabbitImg2];
+      rabbitIndex = 0;
+
+      // 토끼 좌표
+      let rabbitX = 400,
+        rabbitY = 250;
+
+      // 카운트를 셀 변수
+      let count = 0;
+
+      // 토끼 파편 이미지를 로딩해 배열에 저장
+      const fragImgs = [];
+      for (let i = 0; i < 5; i++) {
+        let tmp = new Image();
+        tmp.src = "/Hello/images/r" + i + ".png";
+        fragImgs.push(tmp);
+      }
+      // 토끼 파편 객체(object)를 저장할 배열
+      let fragments = [];
+
+      // 1/100초마다 실행
+      setInterval(() => {
+        // 사각형 영역 clear (x, y, width, height);
+        // context.clearRect(0, 0, 800, 500);
+        // 배경 이미지 그리기
+        context.drawImage(backImg, 0, 0, 800, 500);
+
+        // 토끼 이미지 그리기
+        target = context.drawImage(
+          rabbitImgs[rabbitIndex],
+          rabbitX - 50,
+          rabbitY - 50,
+          100,
+          100
+        );
+
+        // 토끼 파편 그리기
+        for (let i = 0; i < fragments.length; i++) {
+          let tmp = fragments[i];
+          context.drawImage(
+            fragImgs[tmp.index],
+            tmp.x - 50,
+            tmp.y - 50,
+            100,
+            100
+          );
+        }
+
+        // 토끼 파편 움직이기
+        fragments.forEach((tmp) => {
+          // 각 파편 객체가 가지고있는 속도만큼 좌표에 반영
+          tmp.x += tmp.speedX;
+          tmp.y += tmp.speedY;
+          // 화면을 벗어났는 지 여부를 판별해 isOUt에 대입
+          tmp.isOut = tmp.x < -50 || tmp.x > 850 || tmp.y < -50 || tmp.y > 550;
+        });
+
+        fragments = fragments.filter((item) => !item.isOut);
+        console.log(fragments);
+
+        // // 새로운 배열을 얻어내지 않고 기존의 배열에서 제거할 item만 제거
+        // for (let i = fragments.length - 1; i >= 0; i--) {
+        //   // 배열의 마지막 번 째 인덱스로부터 역순으로 검사하며 제거
+        //   let tmp = fragments[i];
+        //   // 만일 화면을 벗어났다면
+        //   if (tmp.isOut) {
+        //     // fragments 배열에서 i번 째 인덱스로부터 1개 제거
+        //     fragments.splice(i, 1);
+        //   }
+        // }
+        // console.log(fragments);
+
+        // 1초에 100번씩 실행되는 영역
+        // holeXY.forEach((item) =>
+        //   context.drawImage(holeImg, item.x, item.y, 20, 20)
+        // );
+
+        for (let i = 0; i < holeXY.length; i++) {
+          context.drawImage(holeImg, holeXY[i].x, holeXY[i].y, 20, 20);
+        }
+        context.drawImage(snipeImg, snipeXY.x, snipeXY.y, 100, 100);
+      }, 10);
+
+      // 토끼 애니메이션
+      setInterval(() => {
+        let count = 0;
+        if (count % 20 == 0) {
+          // rabbitIndex == 2 ? rabbitIndex++ : (rabbitIndex = 0);
+          rabbitIndex++;
+          if (rabbitIndex == 2) {
+            rabbitIndex = 0;
+          }
+        }
+        count++;
+      }, 180);
+
+      // canvas 요소에서 발생하는 mousemove 이벤트 처리
+      canvas.addEventListener("mousemove", (e) => {
+        // 이벤트가 발생한 곳의 canvas 내에서의 좌표
+        let aim = { x: e.offsetX - 50, y: e.offsetY - 50 };
+        snipeXY = aim;
+      });
+
+      canvas.addEventListener("mousedown", (e) => {
+        let shot = { x: e.offsetX - 10, y: e.offsetY - 10 };
+        holeXY.push(shot);
+
+        // 총소리를 강제로 0으로 맞춰서 연속적으로 계속 쏘는 소리가 들리게 한다.
+        fireSound.currentTime = 0.1;
+        fireSound.play();
+      });
+
+      canvas.addEventListener("mousedown", (e) => {
+        // 이벤트가 발생한 곳의 canvas 내에서의 좌표
+        let targetX = e.offsetX;
+        let targetY = e.offsetY;
+
+        // target 영역 체크
+        if (
+          targetX >= rabbitX - 50 &&
+          targetX <= rabbitX + 50 &&
+          targetY >= rabbitY - 50 &&
+          targetY <= rabbitY + 50
+        ) {
+          birddie.currentTime = 0;
+          birddie.play();
+
+          // 토끼 파편객체 5개 만들기
+          for (let i = 0; i < 5; i++) {
+            let tmp = {};
+            tmp.x = rabbitX;
+            tmp.y = rabbitY;
+            // 매 주기(10/1000) 마다 움직일 거리(속도)를 랜덤하게 부여
+            tmp.speedX = Math.random() * 10 - 5; // -5 ~ 5 사이의 랜덤한 실수
+            tmp.speedY = Math.random() * 10 - 5;
+            // 파편 이미지 인덱스도 부여
+            tmp.index = i;
+            tmp.isOut = false; // 화면을 벗어났는 지 여부
+            // 파편의 정보를 가지고 있는 object를 배열에 누적
+            fragments.push(tmp);
+          }
+
+          rabbitX = Math.random() * 750;
+          rabbitY = Math.random() * 450;
+        }
+      });
+    </script>
+  </body>
+</html>
