@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/send")
-public class send extends HttpServlet {
+public class SendServlet extends HttpServlet {
 	// service() 메서드에는 2개의 참조값이 매개변수에 전달된다.
 	// HttpServletRequest 객체 => 요청과 관련된 작업을 처리할 때 사용한다.
 	// HttpServletResponse 객체 => 응답과 관련된 작업을 처리할 때 사용한다.
@@ -21,7 +21,7 @@ public class send extends HttpServlet {
 		// 해당 파라미터명으로 전달되는 정보가 없으면 null이 리턴된다.
 		String msg = req.getParameter("msg");
 		// 콘솔창에 출력해보기
-		System.out.printf("%s", msg);
+		System.out.printf("msg: %s%n", msg);
 		
 		//응답 인코딩 설정
 		resp.setCharacterEncoding("utf-8");
