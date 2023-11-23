@@ -13,6 +13,8 @@
 			<li><a href="test.jsp">Connection 객체 잘 얻어오는 지 확인하기</a></li>
 			<li><a href="${pageContext.request.contextPath}/member/list.jsp">회원 목록보기</a></li>
 			<li><a href="${pageContext.request.contextPath}/member/list2.jsp">회원 목록보기2</a></li>
+			<li><a href="${pageContext.request.contextPath}/dept/list.jsp">부서 목록보기</a></li>
+			<li><a href="${pageContext.request.contextPath}/guest/list.jsp">방명록 목록보기</a></li>
 		</ul>
 	</div>
 </body>

@@ -39,7 +39,7 @@
 		<%} else { %>
 			<p>
 				회원정보 추가 실패!!<br />
-				<a href="${pageContext.request.contextPath}/member/insertfomr.jsp"></a>
+				<a href="${pageContext.request.contextPath}/member/insertform.jsp">다시</a>
 			</p>
 		<%} %>
 	</div>

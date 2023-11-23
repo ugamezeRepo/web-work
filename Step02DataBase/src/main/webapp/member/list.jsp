@@ -10,7 +10,7 @@
     pageEncoding="UTF-8"%>
 <%
 	// 아래의 table에 출력할 회원목록 얻어오기
-	List<MemberDto> list = new ArrayList();
+	List<MemberDto> list = new ArrayList<> ();
 	MemberDto dto = null;
 	
 	Connection conn = null;
