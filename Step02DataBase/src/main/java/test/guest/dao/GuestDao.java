@@ -66,7 +66,7 @@ public class GuestDao {
 		try {
 			conn = new DbcpBean().getConn();
 			//실행할 sql 문
-			String sql = "UPDATE borad_guest"
+			String sql = "UPDATE board_guest"
 					+ " SET writer=?, content=?"
 					+ " WHERE num=? AND pwd=?";
 			pstmt = conn.prepareStatement(sql);

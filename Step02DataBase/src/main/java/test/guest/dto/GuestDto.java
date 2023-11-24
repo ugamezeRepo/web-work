@@ -16,6 +16,14 @@ public class GuestDto {
 		this.pwd = pwd;
 	}
 	
+	public GuestDto(int num, String writer, String content, String pwd) {
+		super();
+		this.num = num;
+		this.writer = writer;
+		this.content = content;
+		this.pwd = pwd;
+	}
+	
 	public GuestDto(int num, String writer, String content, String pwd, String regdate) {
 		super();
 		this.num = num;

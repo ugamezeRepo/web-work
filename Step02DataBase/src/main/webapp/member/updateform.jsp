@@ -16,25 +16,36 @@
 <head>
 <meta charset="UTF-8">
 <title>/member/updateform.jsp</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </head>
 <body>
 	<div class="container">
+		<nav>
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="../index.jsp">Home</a></li>
+				<li class="breadcrumb-item"><a href="list2.jsp">회원 목록</a></li>
+				<li class="breadcrumb-item active">회원 추가</a></li>
+			</ol>
+		</nav>
 		<h1>회원 정보 수정 양식</h1>
 		<form action="update.jsp" method="post">
-			<div>
-				<label for="num">번호</label>
-				<input type="text" id="num" name="num" value="<%=dto.getNum() %>" readonly/>
+			<div class="mb-2">
+				<label class="form-label" for="num">번호</label>
+				<input class="form-control" type="text" id="num" name="num" value="<%=dto.getNum() %>" readonly/>
 			</div>
-			<div>
-				<label for="name">이름</label>
-				<input type="text" id="name" name="name" placeholder="<%=dto.getName() %>"/>
+			<div class="mb-2">
+				<label class="form-label" for="name">이름</label>
+				<input class="form-control" type="text" id="name" name="name" value="<%=dto.getName() %>"/>
+				<div class="form-text">본인의 이름을 입력하세요!</div>
 			</div>
-			<div>
-				<label for="addr">주소</label>
-				<input type="text" id="addr" name="addr" placeholder="<%=dto.getAddr() %>"/>
+			<div class="mb-2">
+				<label class="form-label" for="addr">주소</label>
+				<input class="form-control" type="text" id="addr" name="addr" value="<%=dto.getAddr() %>"/>
+				<div class="form-text">현재 거주하는 주소를 입력하세요!</div>
 			</div>
-			<button type="submit">수정 확인</button>
-			<button type="reset">취소</button>
+			<button class="btn btn-outline-primary" type="submit">수정 확인</button>
+			<button class="btn btn-outline-primary" type="reset">취소</button>
 		</form>
 	</div>
 </body>
