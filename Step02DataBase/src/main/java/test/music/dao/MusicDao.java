@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import test.guest.dto.GuestDto;
 import test.music.dto.MusicDto;
 import test.util.DbcpBean;
 
@@ -29,12 +30,12 @@ public class MusicDao {
 		try {
 			conn = new DbcpBean().getConn();
 			String sql = "INSERT INTO playlist"
-					+ " (num, name, artist, release)"
+					+ " (num, name, artist, rdate)"
 					+ " VALUES (playlist_seq.NEXTVAL, ?, ?, ?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getName());
-			pstmt.setString(2, dto.getartist());
-			pstmt.setString(3, dto.getRelease());
+			pstmt.setString(2, dto.getArtist());
+			pstmt.setString(3, dto.getRdate());
 			rowCount = pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -51,12 +52,12 @@ public class MusicDao {
 		try {
 			conn = new DbcpBean().getConn();
 			String sql = "UPDATE playlist"
-					+ " SET name=?, artist=?, release=?"
+					+ " SET name=?, artist=?, rdate=?"
 					+ " WHERE num=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getName());
-			pstmt.setString(2, dto.getartist());
-			pstmt.setString(3, dto.getRelease());
+			pstmt.setString(2, dto.getArtist());
+			pstmt.setString(3, dto.getRdate());
 			pstmt.setInt(4, dto.getNum());
 			rowCount = pstmt.executeUpdate();
 		} catch (Exception e) {
@@ -93,7 +94,7 @@ public class MusicDao {
 		MusicDto dto = null;
 		try {
 			conn = new DbcpBean().getConn();
-			String sql = "SELECT name, artist, release"
+			String sql = "SELECT name, artist, TO_CHAR(rdate, 'YYYY-MM-DD') rdate"
 					+ " FROM playlist"
 					+ " WHERE num=?";
 			pstmt = conn.prepareStatement(sql);
@@ -103,8 +104,8 @@ public class MusicDao {
 			if (rs.next()) {
 				String name = rs.getString("name");
 				String artist = rs.getString("artist");
-				String release =  rs.getString("release");
-				dto = new MusicDto(name, artist, release);
+				String rdate =  rs.getString("rdate");
+				dto = new MusicDto(num, name, artist, rdate);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -122,7 +123,7 @@ public class MusicDao {
 		MusicDto dto = null;
 		try {
 			conn = new DbcpBean().getConn();
-			String sql = "SELECT name, artist, release"
+			String sql = "SELECT num, name, artist, TO_CHAR(rdate, 'YYYY-MM-DD') rdate"
 					+ " FROM playlist"
 					+ " ORDER BY num DESC";
 			pstmt = conn.prepareStatement(sql); 
@@ -132,8 +133,9 @@ public class MusicDao {
 				int num = rs.getInt("num");
 				String name = rs.getString("name");
 				String artist = rs.getString("artist");
-				String release =  rs.getString("release");
-				dto = new MusicDto(num, name, artist, release);
+				String rdate =  rs.getString("rdate");
+				dto = new MusicDto(num, name, artist, rdate);
+				list.add(dto);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

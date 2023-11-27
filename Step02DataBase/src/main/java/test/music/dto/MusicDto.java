@@ -1,26 +1,28 @@
 package test.music.dto;
 
+import test.music.validator.DateValidator;
+
 public class MusicDto {
 	private int num;
 	private String name;
 	private String artist;
-	private String release;
+	private String rdate;
 	
 	public MusicDto() {}
 	
-	public MusicDto(String name, String artist, String release) {
+	public MusicDto(String name, String artist, String rdate) {
 		super();
 		this.name = name;
 		this.artist = artist;
-		this.release = release;
+		this.rdate = rdate;
 	}
 	
-	public MusicDto(int num, String name, String artist, String release) {
+	public MusicDto(int num, String name, String artist, String rdate) {
 		super();
 		this.num = num;
 		this.name = name;
 		this.artist = artist;
-		this.release = release;
+		this.rdate = rdate;
 	}
 
 	public int getNum() {
@@ -39,19 +41,25 @@ public class MusicDto {
 		this.name = name;
 	}
 
-	public String getartist() {
+	public String getArtist() {
 		return artist;
 	}
 
-	public void setartist(String artist) {
+	public void setArtist(String artist) {
 		this.artist = artist;
 	}
 
-	public String getRelease() {
-		return release;
+	public String getRdate() {
+		return rdate;
 	}
 
-	public void setRelease(String release) {
-		this.release = release;
+	public void setRdate(String rdate) {
+		boolean isValid = DateValidator.validate(rdate);
+		
+		if (isValid) {
+			this.rdate = rdate;
+		} else {
+			throw new IllegalArgumentException("유효한 날짜 형식이 아닙니다.");
+		}	
 	}	
 }

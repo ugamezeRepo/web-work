@@ -30,6 +30,9 @@
         	<li class="nav-item">
           		<a class="nav-link <%=currentPage.equals("guest") ? "active" : "" %> "href="${pageContext.request.contextPath }/guest/list.jsp">방명록</a>
         	</li>
+        	<li class="nav-item">
+          		<a class="nav-link <%=currentPage.equals("music") ? "active" : "" %> "href="${pageContext.request.contextPath }/music/list.jsp">곡리스트</a>
+        	</li>
       	</ul>
       	<form class="d-flex">
 	        <input class="form-control me-2" type="search" placeholder="Search" >
