@@ -51,7 +51,7 @@ public class UserDao {
 		return rowCount > 0;
 	}
 	
-	// update
+	// 아이디를 이용해 회원 한 명의 정보를 수정하는 메서드 (이메일, 프로필 이미지 경로)
 	public boolean update(UserDto dto) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -60,13 +60,37 @@ public class UserDao {
 			conn = new DbcpBean().getConn();
 			//실행할 sql 문
 			String sql = "UPDATE user_info"
-					+ "SET pwd=?, email=?"
-					+ "WHERE id=?";
+					+ " SET email=?, profile=?"
+					+ " WHERE id=?";
+			pstmt = conn.prepareStatement(sql);
+			//? 에 바인딩 할 내용이 있으면 바인딩
+			pstmt.setString(1, dto.getEmail());
+			pstmt.setString(2, dto.getProfile());
+			pstmt.setString(3, dto.getId());
+			rowCount = pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeResource(conn, pstmt);
+		}
+		return rowCount > 0;
+	}
+	
+	// 아이디를 이용해 회원 한 명의 비밀번호를 수정하는 메서드
+	public boolean updatePwd(UserDto dto) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		int rowCount = 0;
+		try {
+			conn = new DbcpBean().getConn();
+			//실행할 sql 문
+			String sql = "UPDATE user_info"
+					+ " SET pwd=?"
+					+ " WHERE id=?";
 			pstmt = conn.prepareStatement(sql);
 			//? 에 바인딩 할 내용이 있으면 바인딩
 			pstmt.setString(1, dto.getPwd());
-			pstmt.setString(2, dto.getEmail());
-			pstmt.setString(3, dto.getId());
+			pstmt.setString(2, dto.getId());
 			rowCount = pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -124,8 +148,8 @@ public class UserDao {
 //			conn = new DbcpBean().getConn();
 //			//실행할 sql 문
 //			String sql = "SELECT id, pwd"
-//					+ "FROM user_info"
-//					+ "WHERE id=?";
+//					+ " FROM user_info"
+//					+ " WHERE id=?";
 //			pstmt = conn.prepareStatement(sql);
 //			//? 에 바인딩할 내용이 있으면 여기서 한다.
 //			pstmt.setString(1, id);

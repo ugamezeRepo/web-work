@@ -10,12 +10,10 @@
 <title>/user/logout.jsp</title>
 </head>
 <body>
-	<div class="container">
-		<p>
-			로그아웃 되었습니다
-			<a href="${pageContext.request.contextPath}/index.jsp">돌아가기</a>
-		</p>
-	</div>
-	
+	<script>
+		alert("로그아웃 되었습니다");
+		// javascript로 페이지 이동시키기
+		location.href = "${pageContext.request.contextPath}/";
+	</script>
 </body>
 </html>

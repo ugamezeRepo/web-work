@@ -31,7 +31,7 @@
 	<%} else { %>
 		<p>
 			수정 실패
-			<a href="updateform.jsp?num=<%=num%>">다시 작성</a>
+			<a href="updateform.jsp?num=<%=num %>">다시 작성</a>
 		</p>
 	<%} %>
 </body>

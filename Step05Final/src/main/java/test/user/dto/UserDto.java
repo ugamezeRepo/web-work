@@ -9,6 +9,12 @@ public class UserDto {
 	
 	public UserDto() {}
 	
+	public UserDto(String id, String email) {
+		super();
+		this.id = id;
+		this.email = email;
+	}
+	
 	public UserDto(String id, String pwd, String email) {
 		super();
 		this.id = id;

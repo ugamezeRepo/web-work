@@ -3,8 +3,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-	request.setCharacterEncoding("utf-8");
-
 	// 1. 폼 전송되는 id, pwd를 읽어와서
 	String id = request.getParameter("id");
 	String pwd = request.getParameter("pwd");
