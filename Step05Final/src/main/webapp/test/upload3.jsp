@@ -15,14 +15,13 @@
 		f.mkdir(); // upload폴더 생성
 	}
 	// cos.jar에 있는 MultipartRequest 클래스로 객체 생성하기
-	MultipartRequest mr = 
-		new MultipartRequest(
-			request, // 내부적으로 필요한 HttpServletRequest 객체 전달
-			realPath, // 업로드된 파일을 저장할 경로
-			1024*1024*100, // 최대 업로드 사이즈 제한
-			"utf-8", // 한글 파일명 깨지지 않도록
-			new DefaultFileRenamePolicy() // 동일한 파일이 존재하면 자동으로 파일을 rename해서 저장하도록
-		);
+	MultipartRequest mr = new MultipartRequest(
+		request, // 내부적으로 필요한 HttpServletRequest 객체 전달
+		realPath, // 업로드된 파일을 저장할 경로
+		1024*1024*100, // 최대 업로드 사이즈 제한
+		"utf-8", // 한글 파일명 깨지지 않도록
+		new DefaultFileRenamePolicy() // 동일한 파일이 존재하면 자동으로 파일을 rename해서 저장하도록
+	);
 	// 위 MultipartRequest 객체가 예외가 발생하지 않고 잘 생성되었다면 파일 업로드가 성공한 것이다.
 	// 따라서, mr에 들어있는 참조값을 이용해서 폼 전송된 값을 추출해 DB에 저장만 잘하면 도니다.
 	

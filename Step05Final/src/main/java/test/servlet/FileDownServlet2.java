@@ -12,21 +12,25 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import test.file.dao.FileDao;
+import test.file.dto.FileDto;
+
 // 파일을 다운로드해주는 서블릿
-@WebServlet("/test/download")
-public class FileDownServlet extends HttpServlet{
+@WebServlet("/file/download")
+public class FileDownServlet2 extends HttpServlet{
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// 다운로드 작업에 필요한 3가지 정보 (원본 파일명, 저장된 파일명, 파일크기) 얻어오기
 		// 지금은 파라미터로 전달되지만, 실제로는 DB에 저장된 정보를 읽어와서 다운로드해야한다.
-		String orgFileName = req.getParameter("orgFileName");
-		String saveFileName = req.getParameter("saveFileName");
-		long fileSize = Long.parseLong(req.getParameter("fileSize"));
+		int num = Integer.parseInt(req.getParameter("num"));
+		FileDto dto = FileDao.getInstance().getData(num); 
+		System.out.printf("num: %d%nwriter: %s%ntitle: %s%nofn: %s%nsfn: %s%nsize: %s%nregdate: %s%n" 
+				, num, dto.getWriter(), dto.getTitle(), dto.getOrgFileName(), dto.getSaveFileName(), dto.getFileSize(), dto.getRegdate());
 		
 		// 응답 헤더 정보 설정
 		resp.setHeader("Content-Type", "application/octet-stream; charset=UTF-8");
 		// 다운로드 시켜줄 파일명 인코딩
-		String encodedName = URLEncoder.encode(orgFileName, "utf-8");
+		String encodedName = URLEncoder.encode(dto.getOrgFileName(), "utf-8");
 		// 파일명에 공백이 있는 경우 처리
 		encodedName = encodedName.replaceAll("\\+", " ");
 		
@@ -34,10 +38,10 @@ public class FileDownServlet extends HttpServlet{
 		resp.setHeader("Content-Transfer-Encoding", "binary");
 		
 		// 다운로드할 파일 크기
-		resp.setContentLengthLong(fileSize);
+		resp.setContentLengthLong(dto.getFileSize());
 		
 		// 다운로드 시켜줄 파일 실제 경로
-		String path = req.getServletContext().getRealPath("/upload")+File.separator+saveFileName;
+		String path = req.getServletContext().getRealPath("/upload")+File.separator+dto.getSaveFileName();
 		
 		FileInputStream fis = null;
 		BufferedOutputStream bos = null;

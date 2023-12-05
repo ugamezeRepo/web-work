@@ -4,7 +4,7 @@
 <%@page import="javax.swing.DefaultBoundedRangeModel"%>
 <%@page import="com.oreilly.servlet.MultipartRequest"%>
 <%@page import="java.io.File"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="application/json; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
 	// 파일 시스템 상에서 webapp의 upload 폴더까지의 절대경로를 얻어낸다.
@@ -35,25 +35,4 @@
 	// 업로드된 파일의 크기(다운로드할 때 필요하다.)
 	long fileSize = mr.getFile("myImage").length();
 %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>/test/upload2.jsp</title>
-</head>
-<body>
-	<p>
-		Title: <strong><%=title %></strong> <br />
-		원본 파일명: <strong><%=orgFileName %></strong> <br />
-		저장된 파일명: <strong><%=saveFileName %></strong> <br /> 
-		파일의 크기: <strong><%=fileSize %></strong> byte <br />
-		파일이 저장된 실제 경로: <strong><%=realPath %></strong> <br />
-		<a href="${pageContext.request.contextPath}/test/download
-			?orgFileName=<%=orgFileName %>
-			&saveFileName=<%=saveFileName %>
-			&fileSize=<%=fileSize %>
-		">다운로드</a> <br />
-		<img width="300" src="${pageContext.request.contextPath}/upload/<%=saveFileName %>" />
-	</p>
-</body>
-</html>
+{"saveFileName": "<%=saveFileName %>"}

@@ -138,7 +138,7 @@ public class UserDao {
 	}
 	
 	// selectAll
-//	public List<UserDto> getAllData(UserDto dto) {
+//	public List<UserDto> getAllData() {
 //		Connection conn = null;
 //		PreparedStatement pstmt = null;
 //		ResultSet rs = null;

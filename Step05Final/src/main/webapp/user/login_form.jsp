@@ -5,8 +5,8 @@
 	String url = request.getParameter("url");
 	if (url == null) {
 		// 로그인 후에 인덱스 페이지로 갈 수 있도록 한다.
-		String cpath = request.getContentType();
-		url = cpath + "/index.jsp";
+		String cPath = request.getContextPath();
+		url = cPath + "/index.jsp";
 	}
 %>
 <!DOCTYPE html>

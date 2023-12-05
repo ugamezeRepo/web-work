@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebFilter({"/user/protected/*", "/shop/*"})
+@WebFilter({"/user/protected/*", "/shop/*", "/file/protected/*"})
 public class LoginFilter implements Filter{
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -52,7 +52,7 @@ public class LoginFilter implements Filter{
 			// ServletResponse type을 HttpServletResponse type으로 casting			
 			HttpServletResponse res = (HttpServletResponse)response;
 			// 리다이렉트 응답(새로운 경로로 요청을 다시하라고 응답)
-			res.sendRedirect(cPath+"/user/login_form.jsp?encodedUrl="+encodedUrl);
+			res.sendRedirect(cPath+"/user/login_form.jsp?url="+encodedUrl);
 		}	
 	}
 }
