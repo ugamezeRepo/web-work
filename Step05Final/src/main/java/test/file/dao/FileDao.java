@@ -21,6 +21,34 @@ public class FileDao {
 		 return dao;
 	}
 	
+	// 전체 글의 개수를 리턴하는 메서드
+	public int getCount() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		int count = 0;
+		try {
+			conn = new DbcpBean().getConn();
+			//실행할 sql 문
+			String sql = "SELECT MAX(ROWNUM) AS count"
+					+ "	FROM board_file";
+			pstmt = conn.prepareStatement(sql);
+			
+			//query 문 수행하고 결과(ResultSet) 얻어내기
+			rs = pstmt.executeQuery();
+			//반복문 돌면서 
+			if (rs.next()) {
+				count = rs.getInt("count");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeResource(conn, pstmt, rs);
+		}
+		return count;
+	}
+	
 	// 업로드된 파일의 정보를 DB에 저장하는 메서드
 	public boolean insert(FileDto dto) {
 		Connection conn = null;
@@ -112,7 +140,7 @@ public class FileDao {
 	}
 	
 	// 파일 목록을 리턴해주는 메서드
-	public List<FileDto> getList() {
+	public List<FileDto> getList(int start, int end) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -122,10 +150,18 @@ public class FileDao {
 		try {
 			conn = new DbcpBean().getConn();
 			//실행할 sql 문
-			String sql = "SELECT num, writer, title, orgFileName, saveFileName, fileSize, regdate"
-					+ " FROM board_file"
-					+ " ORDER BY num DESC";
+			String sql = "SELECT *"
+					+ " FROM"
+					+ "	 (SELECT result1.*, ROWNUM AS rnum"
+					+ "	 FROM"
+					+ "	  (SELECT num, writer, title, orgFileName, fileSize, regdate"
+					+ "	  FROM board_file"
+					+ "	  ORDER BY num DESC) result1)"
+					+ " WHERE rnum BETWEEN ? AND ?";
 			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, start);
+			pstmt.setInt(2, end);
 			
 			//query 문 수행하고 결과(ResultSet) 얻어내기
 			rs = pstmt.executeQuery();
@@ -136,7 +172,6 @@ public class FileDao {
 				dto.setWriter(rs.getString("writer"));
 				dto.setTitle(rs.getString("title"));
 				dto.setOrgFileName(rs.getString("orgFileName"));
-				dto.setSaveFileName(rs.getString("saveFileName"));
 				dto.setFileSize(rs.getLong("fileSize"));
 				dto.setRegdate(rs.getString("regdate"));
 				list.add(dto);

@@ -23,3 +23,26 @@
 --CREATE SEQUENCE board_file_seq; 
 
 -- SELECT num, writer, title, orgFileName, saveFileName, fileSize, regdate FROM board_file;
+
+-- 페이징 처리를 하기위해서는 1. 정렬 2. 행번호 부여 3. 원하는 행만 select
+--SELECT *
+--FROM
+--	(SELECT result1.*, ROWNUM AS rnum
+--	FROM
+--		(SELECT num, writer, title, orgFileName, fileSize, regdate
+--		FROM board_file
+--		ORDER BY num DESC) result1)
+--WHERE rnum BETWEEN 6 AND 10
+
+-- 게시글을 저장할 테이블
+CREATE TABLE board_cafe (
+	num NUMBER PRIMARY KEY, -- 글번호
+	writer VARCHAR2(100) NOT NULL, -- 작성자 (로그인된 아이디)
+	title VARCHAR2(100) NOT NULL, -- 제목
+	content CLOB, -- 글 내용
+	viewCount NUMBER, -- 조회수
+	regdate DATE -- 글 작성일
+);
+
+-- 게시글의 번호를 얻어낼 시퀀스
+CREATE SEQUENCE board_cafe_seq;

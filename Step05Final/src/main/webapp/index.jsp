@@ -31,7 +31,8 @@
 			<li><a href="test/upload_form.jsp">파일 업로드 테스트</a></li>
 			<li><a href="test/upload_form2.jsp">이미지 업로드 테스트</a></li>
 			<li><a href="test/upload_form3.jsp">이미지 업로드 테스트(fetch 활용)</a></li>
-			<li><a href="test/upload_form4.jsp">이미지 단독 업로드 테스트(fetch 활용)</a></li>	 
+			<li><a href="test/upload_form4.jsp">이미지 단독 업로드 테스트(fetch 활용)</a></li>
+			<li><a href="file/list.jsp">자료실 목록보기</a></li>	 
 		</ul>
 	</div>
 </body>

@@ -1,6 +1,6 @@
-<%@page import="test.file.dto.FileDto"%>
+<%@page import="test.cafe.dao.CafeDao"%>
+<%@page import="test.cafe.dto.CafeDto"%>
 <%@page import="java.util.List"%>
-<%@page import="test.file.dao.FileDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
@@ -30,7 +30,7 @@
 	// 하단 끝 페이지 번호
 	int endPageNum = startPageNum + PAGE_DISPLAY_COUNT - 1;
 	// 전체 글의 개수
-	int totalRow = FileDao.getInstance().getCount();
+	int totalRow = CafeDao.getInstance().getCount();
 	// 전체 페이지의 개수 구하기
 	int totalPageCount = (int)Math.ceil(totalRow / (double)PAGE_ROW_COUNT);
 	// 끝 페이지 번호가 이미 전체 페이지 개수보다 크게 계산되었다면 잘못된 값이다.
@@ -39,9 +39,9 @@
 	}
 	
 	// 파일 전체 목록 읽어오기
-	// List<FileDto> list = FileDao.getInstance().getList();
+	// List<CafeDto> list = CafeDao.getInstance().getList();
 	// 보여줄 페이지에 맞는 목록만 얻어오기
-	List<FileDto> list = FileDao.getInstance().getList(startRowNum, endRowNum);
+	// List<CafeDto> list = CafeDao.getInstance().getList(startRowNum, endRowNum);
 	
 	// 로그인된 사용자 읽어오기(로그인 되지 않았다면 null)
 	String id = (String)session.getAttribute("id");
@@ -50,116 +50,40 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>/file/list.jsp</title>
-<style>
-    body {
-        font-family: 'Arial', sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 0;
-    }
-
-    .container {
-        max-width: 800px;
-        margin: 20px auto;
-        background-color: #fff;
-        padding: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .page-list {
-        display: flex;
-        margin: 20px 0;
-        padding: 0;
-        list-style-type: none;
-        justify-content: center;
-    }
-
-    .page-list li {
-        margin: 0 5px;
-    }
-
-    .page-list li a {
-        display: block;
-        padding: 10px 15px;
-        border: 1px solid #3498db;
-        background-color: #3498db;
-        color: #fff;
-        text-align: center;
-        text-decoration: none;
-        border-radius: 5px;
-        transition: background-color 0.3s;
-    }
-
-    .page-list li a:hover,
-    .page-list li.active a {
-        background-color: #297fb8;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-
-    th, td {
-        border: 1px solid #ddd;
-        padding: 12px;
-        text-align: center;
-    }
-
-    th {
-        background-color: #2ecc71;
-        color: #fff;
-    }
-
-    table a {
-        color: #3498db;
-        text-decoration: none;
-    }
-
-    table a:hover {
-        text-decoration: underline;
-    }
-
-    .delete-link {
-        color: #e74c3c;
-        cursor: pointer;
-    }
-</style>
+<title>/cafe/list.jsp</title>
 </head>
 <body>
 	<div class="container">
-		<a href="${pageContext.request.contextPath}/file/protected/upload_form.jsp">업로드하러 가기</a>
+		<a href="${pageContext.request.contextPath}/cafe/protected/upload_form.jsp">업로드하러 가기</a>
 		<a href="${pageContext.request.contextPath}/index.jsp">인덱스로</a>
-		<h1>자료실 목록입니다.</h1>
+		<h1>카페글 목록입니다.</h1>
 		<table border="1" cellpadding="5">
 			<thead>
 				<tr>
 					<th>번호</th>
 					<th>작성자</th>
 					<th>제목</th>
-					<th>파일명</th>
-					<th>크기</th>
-					<th>등록일</th>
+					<th>내용</th>
+					<th>조회수</th>
+					<th>작성일</th>
 					<th>삭제</th>
 				</tr>
 			</thead>
 			<tbody>
-				<%for(FileDto dto:list) { %>
+				<%for(CafeDto dto:list) { %>
 				<tr>
 					<td><%=dto.getNum() %></td>
 					<td><%=dto.getWriter() %></td>
 					<td><%=dto.getTitle() %></td>
 					<td>
-						<a href="${pageContext.request.contextPath}/file/download?num=<%=dto.getNum() %>"><%=dto.getOrgFileName() %></a>
+						<a href="${pageContext.request.contextPath}/cafe/download?num=<%=dto.getNum() %>"><%=dto.getOrgFileName() %></a>
 					</td>
 					<td><%=dto.getFileSize() %></td>
 					<td><%=dto.getRegdate() %></td>
 					<td>
 						<%-- 글 작성자와 로그인된 아이디가 같을 때만 삭제 링크를 출력해준다. --%>
 						<%if (dto.getWriter().equals(id)) { %>
-						<a href="${pageContext.request.contextPath}/file/protected/delete.jsp?num=<%=dto.getNum() %>">삭제</a>
+						<a href="${pageContext.request.contextPath}/cafe/protected/delete.jsp?num=<%=dto.getNum() %>">삭제</a>
 						<%} %>
 					</td>
 				</tr>

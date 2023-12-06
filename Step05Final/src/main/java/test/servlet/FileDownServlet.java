@@ -12,16 +12,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import test.file.dao.FileDao;
+import test.file.dto.FileDto;
+
 // 파일을 다운로드해주는 서블릿
 @WebServlet("/test/download")
 public class FileDownServlet extends HttpServlet{
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// GET 방식 요청 파라미터로 전달되는 다운로드할 파일의 번호
+		int num = Integer.parseInt(req.getParameter("num"));
+		// 다운로드할 파일의 정보 얻어오기
+		FileDto dto = FileDao.getInstance().getData(num);
+		
 		// 다운로드 작업에 필요한 3가지 정보 (원본 파일명, 저장된 파일명, 파일크기) 얻어오기
 		// 지금은 파라미터로 전달되지만, 실제로는 DB에 저장된 정보를 읽어와서 다운로드해야한다.
-		String orgFileName = req.getParameter("orgFileName");
-		String saveFileName = req.getParameter("saveFileName");
-		long fileSize = Long.parseLong(req.getParameter("fileSize"));
+		String orgFileName = dto.getOrgFileName();
+		String saveFileName = dto.getSaveFileName();
+		long fileSize = dto.getFileSize();
 		
 		// 응답 헤더 정보 설정
 		resp.setHeader("Content-Type", "application/octet-stream; charset=UTF-8");
