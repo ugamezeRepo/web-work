@@ -8,7 +8,7 @@
 	// 프로필 이미지를 한 번도 등록한 적이 없으면 "null"이 넘어온다.
 	String profile = request.getParameter("profile");
 	if(profile.equals("null")) {
-		// DB의 profule 컬럼을 null로 유지하기 위해 null을 넣어준다.
+		// DB의 profile 컬럼을 null로 유지하기 위해 null을 넣어준다.
 		profile = null;
 	}
 	
