@@ -5,9 +5,9 @@
     pageEncoding="UTF-8"%>
 <%
 	// 한 페이지에 몇 개씩 표시할 것인 지
-	final int PAGE_ROW_COUNT = 2;
+	final int PAGE_ROW_COUNT = 4;
 	// 하단 페이지를 몇 개씩 표시할 건인 지
-	final int PAGE_DISPLAY_COUNT = 5;
+	final int PAGE_DISPLAY_COUNT = 10;
 
 	// 보여줄 페이지의 번호를 일단 1이라고 초기값 설정
 	int pageNum = 1;
@@ -38,10 +38,16 @@
 		endPageNum = totalPageCount; //보정해 준다. 
 	}
 	
+	//CafeDto 객체를 생성해서 
+	CafeDto dto=new CafeDto();
+	//위에서 계산된 startRowNum 과 endRowNum 을 담고
+	dto.setStartRowNum(startRowNum);
+	dto.setEndRowNum(endRowNum);
+	
 	// 파일 전체 목록 읽어오기
 	// List<CafeDto> list = CafeDao.getInstance().getList();
 	// 보여줄 페이지에 맞는 목록만 얻어오기
-	List<CafeDto> list = CafeDao.getInstance().getList(startRowNum, endRowNum);
+	List<CafeDto> list = CafeDao.getInstance().getList(dto);
 	
 	// 로그인된 사용자 읽어오기(로그인 되지 않았다면 null)
 	String id = (String)session.getAttribute("id");
@@ -144,17 +150,17 @@
 				</tr>
 			</thead>
 			<tbody>
-				<%for(CafeDto dto: list) { %>
+				<%for(CafeDto tmp: list) { %>
 				<tr>
-					<td><%=dto.getNum() %></td>
-					<td><%=dto.getWriter() %></td>
+					<td><%=tmp.getNum() %></td>
+					<td><%=tmp.getWriter() %></td>
 					<td>
-						<a href="${pageContext.request.contextPath}/cafe/detail.jsp?num=<%=dto.getNum() %>">
-							<%=dto.getTitle() %>
+						<a href="${pageContext.request.contextPath}/cafe/detail.jsp?num=<%=tmp.getNum() %>">
+							<%=tmp.getTitle() %>
 						</a>
 					</td>
-					<td><%=dto.getViewCount() %></td>
-					<td><%=dto.getRegdate() %></td>
+					<td><%=tmp.getViewCount() %></td>
+					<td><%=tmp.getRegdate() %></td>
 				</tr>
 				<%} %>
 			</tbody>
