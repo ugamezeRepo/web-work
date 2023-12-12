@@ -8,67 +8,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>index.jsp</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
-            margin-bottom: 10px;
-        }
-
-        a {
-            text-decoration: none;
-            color: #333;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        a:hover {
-            color: #e74c3c;
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        p {
-            font-size: 16px;
-            color: #555;
-        }
-
-        .login-info {
-            margin-bottom: 20px;
-        }
-
-        .login-info a {
-            margin-right: 20px;
-            color: #3498db;
-        }
-
-        .login-info a:hover {
-            color: #e74c3c;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </head>
 <body>
+	<jsp:include page="/include/navbar.jsp">
+		<jsp:param value="index" name="current" />
+	</jsp:include>
+	
     <div class="container">
         <div class="login-info">
             <%if(id != null) { %>
@@ -95,5 +42,7 @@
             <li><a href="cafe/list.jsp">카페글 목록보기</a></li>
         </ul>
     </div>
+    
+    <jsp:include page="/include/footer.jsp"></jsp:include>
 </body>
 </html>
