@@ -1,14 +1,14 @@
-<%@page import="test.cafe.dao.CafeDao"%>
-<%@page import="test.cafe.dto.CafeDto"%>
+<%@page import="test.file.dto.FileDto"%>
+<%@page import="test.file.dao.FileDao"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 	// 한 페이지에 몇 개씩 표시할 것인 지
-	final int PAGE_ROW_COUNT = 4;
+	final int PAGE_ROW_COUNT = 10;
 	// 하단 페이지를 몇 개씩 표시할 건인 지
-	final int PAGE_DISPLAY_COUNT = 5;
+	final int PAGE_DISPLAY_COUNT = 10;
 
 	// 보여줄 페이지의 번호를 일단 1이라고 초기값 설정
 	int pageNum = 1;
@@ -31,7 +31,7 @@
 	// 하단 끝 페이지 번호
 	int endPageNum = startPageNum + PAGE_DISPLAY_COUNT - 1;
 	// 전체 글의 개수
-	int totalRow = CafeDao.getInstance().getCount();
+	int totalRow = FileDao.getInstance().getCount();
 	// 전체 페이지의 개수 구하기
 	int totalPageCount = (int)Math.ceil(totalRow / (double)PAGE_ROW_COUNT);
 	// 끝 페이지 번호가 이미 전체 페이지 개수보다 크게 계산되었다면 잘못된 값이다.
@@ -39,20 +39,17 @@
 		endPageNum = totalPageCount; //보정해 준다. 
 	}
 	
-	//CafeDto 객체를 생성해서 
-	CafeDto dto=new CafeDto();
-	//위에서 계산된 startRowNum 과 endRowNum 을 담고
-	dto.setStartRowNum(startRowNum);
-	dto.setEndRowNum(endRowNum);
-	
 	// 파일 전체 목록 읽어오기
-	// List<CafeDto> list = CafeDao.getInstance().getList();
+	// List<FileDto> list = FileDao.getInstance().getList();
 	// 보여줄 페이지에 맞는 목록만 얻어오기
-	List<CafeDto> list = CafeDao.getInstance().getList(dto);
+	List<FileDto> list = FileDao.getInstance().getList(startRowNum, endRowNum);
 	
 	// 로그인된 사용자 읽어오기(로그인 되지 않았다면 null)
 	String id = (String)session.getAttribute("id");
 	
+	// EL + JSTL을 테스트하기 위해 응답에 필요한 데이터(model)를 request 영역에 담기
+	
+	// "list" 키값에 파일 목록(List<FileDto>) 담기
 	request.setAttribute("list", list);
 	request.setAttribute("startPageNum", startPageNum);
 	request.setAttribute("endPageNum", endPageNum);
@@ -62,7 +59,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>/cafe/list.jsp</title>
+<title>/file/list.jsp</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 <style>
@@ -115,7 +112,7 @@
     }
 
     th {
-        background-color: #131313;
+        background-color: #2ecc71;
         color: #fff;
     }
 
@@ -136,54 +133,71 @@
 </head>
 <body>
 	<jsp:include page="/include/navbar.jsp">
-		<jsp:param value="cafe" name="current" />
+		<jsp:param value="file" name="current" />
 	</jsp:include>
 	
 	<div class="container">
-		<h1>카페글 목록입니다.</h1>
-		<a href="${pageContext.request.contextPath}/cafe/protected/insert_form.jsp">작성</a>
+		<a href="${pageContext.request.contextPath}/file/protected/upload_form.jsp">업로드하러 가기</a>
+		<a href="${pageContext.request.contextPath}/index.jsp">인덱스로</a>
+		<h1>자료실 목록입니다.</h1>
 		<table border="1" cellpadding="5">
 			<thead>
 				<tr>
 					<th>번호</th>
 					<th>작성자</th>
 					<th>제목</th>
-					<th>조회수</th>
-					<th>작성일</th>
+					<th>파일명</th>
+					<th>크기</th>
+					<th>등록일</th>
+					<th>삭제</th>
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="tmp" items="${list }">
+				<c:forEach var="tmp" items="${requestScope.list }">
 					<tr>
 						<td>${tmp.num }</td>
 						<td>${tmp.writer }</td>
+						<td>${tmp.title }</td>
 						<td>
-							<a href="${pageContext.request.contextPath}/cafe/detail.jsp?num=${tmp.num }">${tmp.title }</a>
+							<a href="${pageContext.request.contextPath}/file/download?num=${tmp.num }">${tmp.orgFileName }</a>
 						</td>
-						<td>${tmp.viewCount }</td>
+						<td>${tmp.fileSize }</td>
 						<td>${tmp.regdate }</td>
+						<td>
+							<c:if test="${tmp.writer eq sessionScope.id }">
+								<a href="${pageContext.request.contextPath}/file/protected/delete.jsp?num=${tmp.num }">삭제</a>
+							</c:if>
+						</td>
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
 		
 		<!-- 페이징 UI -->
-		<ul class="page-list">
+		<ul class="page-list">	
 			<c:if test="${startPageNum ne 1 }">
 				<li><a href="list.jsp?pageNum=${startPageNum - 1 }">Prev</a></li>
 			</c:if>
 			
 			<c:forEach var="i" begin="${startPageNum }" end="${endPageNum }">
-				<li ${i eq param.pageNum ? 'class="active"' : ''}>
+				<li ${i eq param.pageNum ? 'class="active"' : '' }>
 					<a href="list.jsp?pageNum=${i }">${i }</a>
 				</li>
+				
+				<!-- 
+				<c:choose>
+					<c:when test="${i eq param.pageNum }">
+						<li class="active"><a href="list.jsp?pageNum=${i }">${i }</a></li>
+					</c:when>
+					<c:otherwise>
+						<li><a href="list.jsp?pageNum=${i }">${i }</a></li>
+					</c:otherwise>
+				</c:choose>
+				 -->
 			</c:forEach>
 			
-			<%--
-				마지막 페이지 번호가 전체 페이지의 개수보다 작으면 Next 링크를 제공한다.
-			--%>
 			<c:if test="${endPageNum lt totalPageCount }">
-				<li><a href="list.jsp?pageNum=<%=endPageNum+1 %>">Next</a></li>
+				<li><a href="list.jsp?pageNum=${endPageNum + 1 }">Next</a></li>
 			</c:if>
 		</ul>
 	</div>

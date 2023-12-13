@@ -33,11 +33,6 @@
 		(웹브라우저를 닫아도 지워지지 않는다)
 	*/
 	application.setAttribute("companyName", companyName);
-	
-	pageContext.setAttribute("asd", "asd11");
-	request.setAttribute("asd", "asd22");
-	session.setAttribute("asd", "asd33");
-	application.setAttribute("asd", "asd44");
 %>     
 <!DOCTYPE html>
 <html>
@@ -46,14 +41,7 @@
 <title>/test_el/test02.jsp</title>
 </head>
 <body>
-	<div class="container">
-		<h1> 실험</h1>
-		<p>내이름은 <strong>${pageScope.asd }</strong></p>
-		<p>내이름은 <strong>${request.asd }</strong></p>
-		<p>내이름은 <strong>${session.asd }</strong></p>
-		<p>내이름은 <strong>${application.asd }</strong></p>
-		<p>내이름은 <strong>${asd }</strong></p>
-		
+	<div class="container">	
 		<h1> EL 로 page scope 에 저장된 값 추출</h1>
 		<p>내이름은 <strong>${pageScope.myName }</strong></p>
 		<p>내이름은 <strong>${myName }</strong></p>
