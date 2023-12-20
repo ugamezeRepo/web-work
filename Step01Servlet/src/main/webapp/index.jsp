@@ -10,6 +10,7 @@
 		<h1>인덱스 페이지입니다.</h1>
 		<p>컨텍스트 경로: <strong>${pageContext.request.contextPath}</strong></p>
 		<ul>
+		<li><a href="${pageContext.request.contextPath}/showtime">테스트</a></li>
 			<li><a href="/Step01Servlet/friend/list">친구 목록보기</a></li>
 			<li><a href="${pageContext.request.contextPath}/member/list">회원 목록보기</a></li>
 			<li><a href="${pageContext.request.contextPath}/friend/list.jsp">친구 목록보기(jsp)</a></li>
@@ -19,6 +20,11 @@
 		<form action="${pageContext.request.contextPath}/send" method="get">
 			<input type="text" name="msg" placeholder="servlet get 방식..." />
 			<button type="submit">전송</button>
+		</form>
+		
+		<form action="${pageContext.request.contextPath}/showtime" method="get">
+			<input type="text" name="msg" placeholder="servlet get 방식..." />
+			<button type="submit">asd</button>
 		</form>
 		
 		<form action="${pageContext.request.contextPath}/send2" method="post">

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/templates/sub/inc.html</title>
+</head>
+<body>
+	<div class="container">
+		<h3>본문 내용입니다.</h3>
+		<ul>
+			<li>하나</li>
+			<li>두울</li>
+		</ul>
+		<!-- insert하면 이 div 안에 include 된 내용이 들어간다. -->
+		<div th:insert="~{/include/footer :: one}"></div>
+		<!-- replace하면 이 div 를 대체해 include된 내용이 들어간다. -->
+		<div th:replace="~{/include/footer :: one}"></div>
+	</div>
+</body>
+</html>

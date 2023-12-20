@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/templates/sub/member.html</title>
+</head>
+<body>
+	<h3>회원 정보</h3>
+	<p>
+		번호: <strong th:text="${dto.num}"></strong> <br />
+		이름: <strong th:text="${dto.name}"></strong> <br />
+		주소: <strong>[[${dto.addr}]]</strong> <br />
+	</p>
+</body>
+</html>

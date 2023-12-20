@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/templates/sub/members.html</title>
+</head>
+<body>
+	<div class="container">
+		<h3>회원 목록</h3>
+	
+		<table>
+			<thead>
+				<tr>
+					<th>번호</th>
+					<th>이름</th>
+					<th>주소</th>
+					<th>삭제</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="item: ${list}">
+					<td th:text="${item.num}"></td>
+					<td th:text="${item.name}"></td>
+					<td>[[${item.addr}]]</td>
+					<td>
+						<a th:href="@{/member/delete(num=${item.num})}">삭제</a>
+						<!--/* 
+							pipe 문자를 마치 backtick ``처럼 사용하여 문자열을 이어붙일 수 있다. 
+							<a th:href="@{|/member/delete?num=${item.num}|}">삭제</a>
+						*/-->
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+</body>
+</html>

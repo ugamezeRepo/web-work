@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/templates/sub/notice.html</title>
+</head>
+<body>
+	<div class="container">
+		<h3>공지사항</h3>
+	
+		<ul>
+			<!--/* 
+				th:each를 이용해 반복적으로 문서객체 출력 가능
+				list는 List<String> type이므로 item은 String type
+				String type은 직접 출력 가능
+			*/-->
+			<li th:each="item: ${list}">[[${item}]]</li>
+		</ul>
+		
+		<h3>공지사항2</h3>
+		<ul>
+			<li th:each="item: ${list}" th:text="${item}"></li>
+		</ul>
+		
+		<h3>공지사항3</h3>
+		<ul>
+			<li th:each="item, status: ${list}">
+				count: [[${status.count}]]
+				index: [[${status.index}]]
+				size: [[${status.size}]]
+				even: [[${status.even}]]
+				odd: [[${status.odd}]]
+				first: [[${status.first}]]
+				last: [[${status.last}]]
+				current: [[${status.current}]]
+			</li>
+		</ul>
+		
+		<!--/*
+			반복할 블럭 직접 설정
+			div 블록 생성 없이 형제 요소를 반복하여 생성할 때 사용 
+		*/-->
+		<h4>공지사항4</h4>
+		<th:block th:each="item, status: ${list}">
+			<h5>[[${status.count}]]</h5>
+			<p>[[${item}]]</p>
+		</th:block>
+	</div>
+</body>
+</html>

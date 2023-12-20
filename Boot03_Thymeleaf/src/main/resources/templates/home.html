@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/templates/home.html</title>
+<!--/* bootstrap css 로딩 */-->
+<link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
+<!--/* bootstrap js 로딩 */-->
+<script th:src="@{/js/bootstrap.js}"></script>
+</head>
+<body>
+	<div class="container">
+		<h1>home 페이지입니다.</h1>
+		<p>오늘의 운세: <strong th:text="${fortuneToday}"></strong></p>
+		<p>오늘의 운세: <strong>[[${fortuneToday}]]</strong></p>
+		<p th:if="${session.id != null}">
+			<strong>[[${session.id}]]</strong>님 반갑습니다.
+			<a th:href="@{/user/logout}">로그아웃</a>
+		</p>
+		<p th:unless="${session.id != null}">
+			로그인을 하세요
+			<a th:href="@{/user/login}">로그인</a>
+		</p>
+		
+		<ul>
+			<li><a th:href="@{/sub/play}">놀러가기</a></li>
+			<!-- th에서 문자열은 single quote를 이용한다. -->
+			<li><a th:href="'/boot03/shop/buy?id=abc111&amount=2'">abc111 상품 2개 구매하기</a></li>
+			<li><a th:href="@{/shop/buy?id=abc111&amount=2}">abc111 상품 2개 구매하기</a></li>
+			<li><a th:href="@{'/shop/buy?id=' + ${id} + '&amount=' + ${amount}}">abc111 상품 2개 구매하기</a></li>
+			
+			<li><a th:href="@{/shop/buy(num=${id}, amount=${amount})}">abc111 상품 2개 구매하기</a></li>
+			<li><a th:href="@{/posts/{numId}(numId=${num})}">경로 파라미터 테스트</a></li>
+			<li><a th:href="@{/member}">회원 정보</a></li>
+			<li><a th:href="@{/notice}">공지사항</a></li>
+			<li><a th:href="@{/members}">회원 목록</a></li>
+			<li><a th:href="@{/inc}">include 테스트</a></li>
+		</ul>
+		<p>
+			문자열 연결하기 <br />
+			
+		</p>
+		
+		<!-- html 주석. 웹브라우저가 무시하는 주석 -->
+		<!--/* 
+			thymeleaf 주석. Thymeleaf View Engine이 무시하는 주석
+			클라이언트 측에 출력되지 않는다.
+		*/-->
+		<img src="/boot03/images/kim1.png" />
+		<img th:src="@{/images/kim1.png}" />
+	</div>
+</body>
+</html>
