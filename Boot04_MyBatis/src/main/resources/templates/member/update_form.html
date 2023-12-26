@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/member/update_form.html</title>
+</head>
+<body>
+	<div class="container">
+		<h3>회원 수정폼</h3>
+		<form th:action="@{/member/update}" method="post">
+			<div>
+				<label for="num">번호</label>
+				<input type="text" name="num" id="num" th:value="${dto.num}" readonly />
+			</div>
+			<div>
+				<label for="name">이름</label>
+				<input type="text" name="name" id="name" th:value="${dto.name}" />
+			</div>
+			<div>
+				<label for="addr">주소</label>
+				<input type="text" name="addr" id="addr" th:value="${dto.addr}" />
+			</div>
+			<div>
+				<button type="submit">수정</button> 
+				<button type="result">초기화</button>
+				<button>
+					<a th:href="@{member/list}" style="text-decoration: none;">돌아가기</a>
+				</button>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

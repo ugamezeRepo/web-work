@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/member/insert.html</title>
+</head>
+<body>
+	<div class="container">
+		<h3>알림</h3>
+		<p>
+			<strong th:text="${param.name}"></strong>
+			님의 정보를 저장했습니다.
+			<a th:href="@{/member/list}">목록보기</a>
+		</p>
+	</div>
+</body>
+</html>

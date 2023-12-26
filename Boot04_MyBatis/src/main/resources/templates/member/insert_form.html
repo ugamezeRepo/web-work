@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/member/insert_form</title>
+</head>
+<body>
+	<div class="container">
+		<h3>회원 추가 폼</h3>
+		
+		<form th:action="@{/member/insert}" method="post">
+			<div>
+				<label for="name">이름</label>
+				<input type="text" name="name" id="name" />
+			</div>
+			<div>
+				<label for="addr">주소</label>
+				<input type="text" name="addr" id="addr" />
+			</div>
+			<button type="submit">추가</button>
+		</form>
+	</div>
+</body>
+</html>

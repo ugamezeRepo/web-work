@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/home.html</title>
+</head>
+<body>
+	<div class="container">
+		<h1>인덱스 페이지</h1>
+		<ul>
+			<li><a th:href="@{/member/list}">회원 목록</a></li>
+			<li><a th:href="@{/member/insert_form}">회원 추가</a></li>
+		</ul>
+		
+		<h2>공지사항</h2>
+		<ul>
+			<li th:each="item:${noticeList}">[[${item}]]</li>
+		</ul>
+	</div>
+</body>
+</html>

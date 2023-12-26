@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/member/list.html</title>
+</head>
+<body>
+	<div class="container">
+		<h3>회원 목록</h3>
+		
+		<table>
+			<thead>
+				<tr>
+					<th>번호</th>
+					<th>이름</th>
+					<th>주소</th>
+					<th>수정</th>
+					<th>삭제</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="tmp: ${list}">
+					<td th:text="${tmp.num}"></td>
+					<td th:text="${tmp.name}" style="text-align: center;"></td>
+					<td style="text-align: center;">[[${tmp.addr}]]</td>
+					<td>
+						<a th:href="@{/member/update_form(num=${tmp.num})}">수정</a>
+					</td>
+					<td>
+						<a th:href="@{/member/delete(num=${tmp.num})}">삭제</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
