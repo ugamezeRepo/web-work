@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class HomeController {
 
-	@GetMapping({ "/" })
+	@GetMapping({ "/", "/home" })
 	public String home(Model model, HttpSession session) {
 		// Model 객체에 담은 데이터는 request 영역에 담긴다.
 		model.addAttribute("fortuneToday", "행운의 빛이 비추니 한번 코인 떡상을 노려봐도 좋아요!");

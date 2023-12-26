@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/templates/sub/escape_test.html</title>
+</head>
+<body>
+	<div class="container">
+		<p>Thymeleaf에서 문자열을 출력할 때 자동 escape된 문자열이 출력된다.</p>
+		<p>여기서 escape란 html 형식에서 escape(탈출)라고 생각하면 된다.</p>
+		
+		<h3>anchor </h3>
+		<div th:text="${markup}"></div>
+		<div>[(${markup})]</div>
+		<!--/* utext를 활용하면 unescape된다. */-->
+		<div th:utext="${markup}"></div>
+		<!--/* [(${...})] 이 또한 unescape */-->
+		<div>[[${markup}]]</div>
+		
+		<h3>url 인코딩</h3>
+		<div>[[${#uris.escapePath(url)}]]</div>
+		<a th:href="@{${#uris.escapePath(url)}}">구입하기</a>
+	</div>
+</body>
+</html>

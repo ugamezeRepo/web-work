@@ -10,5 +10,18 @@
 		<p>어쩌궁</p>
 		<p>저쩌궁</p>
 	</div>
+	
+	<div th:fragment="two">
+		<p>footer입니다.2</p>
+		<p>어쩌궁</p>
+		<p>저쩌궁</p>
+	</div>
+	
+	<div th:fragment="myFooter(title)">
+		<h3 th:text="${title}"></h3>
+		<p>footer입니다.3</p>
+		<p>어쩌궁</p>
+		<p>저쩌궁</p>
+	</div>
 </body>
 </html>
