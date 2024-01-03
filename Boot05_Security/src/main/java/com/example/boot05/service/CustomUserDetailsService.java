@@ -14,8 +14,8 @@ import com.example.boot05.dto.UserDto;
 
 // 원래는 DB 에서 읽어와야 하지만 DB 에 저장된 sample 데이터가 아래와 같다고 가정하고 로그인후 테스트해야한다.
 // - 계정 / 비밀번호 예시
-// 1. 일반 사용자(USER) => kimgura / 1234
-// 2. 직원(STAFF) => monkey / 1234
+// 1. 일반 사용자(USER) => udada / 1234
+// 2. 직원(STAFF) => batman / 1234
 // 3. 관리자(ADMIN) => superman / 1234
 
 @Service // Bean으로 만들기 위해

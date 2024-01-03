@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/templates/notice.html</title>
+</head>
+<body>
+	<h3>공지사항입니다.</h3>
+	<ul>
+		<li th:each="item:${noticeList}">[[${item}]]</li>
+	</ul>
+</body>
+</html>
