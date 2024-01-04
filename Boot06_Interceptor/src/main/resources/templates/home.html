@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/home.html</title>
+</head>
+<body>
+	<div class="container">
+		<p th:if="${session.id != null}">
+			<strong>[[${session.id}]]</strong> 님
+			<a th:href="@{/user/logout}">로그아웃</a>
+		</p>
+		<p th:unless="${session.id != null}">
+			<a th:href="@{/user/loginform}">로그인</a>
+		</p>
+	
+		<h1>인덱스 페이지</h1>
+		
+		<p>
+			오늘의 운세: <strong th:text="${fortuneToday}"></strong> <br />
+			오늘의 운세: <strong>[[${fortuneToday}]]</strong>
+		</p>
+		
+		<ul>
+			<li><a th:href="@{/sub/play}">놀러가기</a></li>
+			<li><a th:href="@{/sub/study}">공부하러 가기(로그인 필요)</a></li>
+		</ul>
+	</div>
+</body>
+</html>
