@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/home.html</title>
+</head>
+<body>
+	<div class="container">
+		<h1>인덱스 페이지</h1>
+		
+		<h3>공지 사항</h3>
+		
+		<ul>
+			<li th:each="tmp: ${notice}">[[${tmp}]]</li>
+		</ul>
+	</div>
+</body>
+</html>
