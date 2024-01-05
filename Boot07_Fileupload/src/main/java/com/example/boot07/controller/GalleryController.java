@@ -4,18 +4,44 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class GalleryController {
     @Value("${file.location}")
     private String fileLocation;
+
+    @PostMapping("/gallery/upload")
+    public String upload(MultipartFile image, Model m) {
+        String saveFileName = UUID.randomUUID().toString();
+        String filePath = fileLocation + File.separator + saveFileName;
+
+        try {
+            File f = new File(filePath);
+            image.transferTo(f);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        m.addAttribute("saveFileName", saveFileName);
+
+        return "gallery/upload";
+    }
+
+    @GetMapping("/gallery/uploadform")
+    public String uploadform() {
+
+        return "/gallery/uploadform";
+    }
 
     @GetMapping("/gallery/list")
     public String list() {

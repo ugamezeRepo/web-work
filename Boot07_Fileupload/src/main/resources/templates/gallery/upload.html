@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/gallery/upload.html</title>
+<style>
+	img {
+		width: 300px
+	}
+</style>
+</head>
+<body>
+	<div class="container">
+		<p>이미지를 업로드했습니다.</p>
+		<p>저장된 파일명: <strong th:text="${saveFileName}">[[${saveFileName}]]</strong></p>
+		<p>실제 이미지: <img th:src="@{'/gallery/images/' + ${saveFileName}}" /></p>
+		<p>실제 이미지: <img th:src="@{/gallery/images/{name}(name=${saveFileName})}" /></p>
+	</div>
+</body>
+</html>
