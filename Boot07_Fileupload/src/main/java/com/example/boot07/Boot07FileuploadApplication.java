@@ -2,14 +2,19 @@ package com.example.boot07;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.PropertySource;
 import com.example.boot07.dto.MemberDto;
 
+/*
+ *  @PropertySource(value = "커스텀 properties 파일의 위치")
+ *  classpath: 는 resources 폴더를 가리킨다. 
+ */
+@PropertySource(value = "classpath:custom.properties")
 @SpringBootApplication
 public class Boot07FileuploadApplication {
 
     public static void main(String[] args) {
-        SpringApplication
-                .run(Boot07FileuploadApplication.class, args);
+        SpringApplication.run(Boot07FileuploadApplication.class, args);
 
         // 크롬을 실행해서 http://localhost:9000/boot07 로딩하기
         // Runtime rt = Runtime.getRuntime();
@@ -20,22 +25,11 @@ public class Boot07FileuploadApplication {
         // }
 
         MemberDto dto = new MemberDto();
-        dto
-                .setNum(1);
-        dto
-                .setName("김구라");
-        dto
-                .setAddr("노량진");
-        System.out
-                .println(dto);
-        MemberDto dto2 = MemberDto
-                .builder()
-                .num(2)
-                .name("해골")
-                .addr("행신동")
-                .build();
-        System.out
-                .println(dto2);
+        dto.setNum(1);
+        dto.setName("김구라");
+        dto.setAddr("노량진");
+
+        MemberDto dto2 = MemberDto.builder().num(2).name("해골").addr("행신동").build();
     }
 
 }

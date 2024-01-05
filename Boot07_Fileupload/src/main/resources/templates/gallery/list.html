@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/gallery/list.html</title>
+<style>
+	.wrapper {
+		display: flex;
+	}
+	
+	.wrapper img {
+		width: 200px;
+	}
+</style>
+</head>
+<body>
+	<div class="container">
+		<div class="wrapper">
+			<div>
+				<img th:src="@{/images/image1.png}" />
+			</div>
+			<div>
+				<img th:src="@{/images/image2.png}" />
+			</div>
+			<div>
+				<img th:src="@{/images/image3.png}" />
+			</div>
+			<div>
+				<img th:src="@{/images/image4.png}" />
+			</div>
+			<div>
+				<img th:src="@{/images/image5.png}" />
+			</div>
+			<div>
+				<img th:src="@{/images/image6.png}" />
+			</div>
+		</div>
+		
+		<div class="wrapper">
+			<div>
+				<img th:src="@{/gallery/images/image1.png}" />
+			</div>
+			<div>
+				<img th:src="@{/gallery/images/image2.png}" />
+			</div>
+			<div>
+				<img th:src="@{/gallery/images/image3.png}" />
+			</div>
+			<div>
+				<img th:src="@{/gallery/images/image4.png}" />
+			</div>
+			<div>
+				<img th:src="@{/gallery/images/image5.png}" />
+			</div>
+			<div>
+				<img th:src="@{/gallery/images/image6.png}" />
+			</div>
+		</div>
+	</div>
+</body>
+</html>
