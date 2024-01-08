@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+	<insert id="insert" parameterType="userDto">
+		INSERT INTO user_tbl
+		(id, userName, password, email, role)
+		VALUES(user_seq.NEXTVAL, #{userName}, #{password}, #{email}, #{role})
+	</insert>
+	<select id="getData" parameterType="String" resultType="userDto">
+		SELECT id, userName, password, email, role
+		FROM user_tbl
+		WHERE userName=#{userName}
+	</select>
+</mapper>
