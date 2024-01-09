@@ -1,10 +1,10 @@
 package com.example.boot09.service;
 
 import org.springframework.ui.Model;
-import com.example.boot09.dto.GalleryDto;
+import com.example.boot09.dto.CafeDto;
 
-public interface GalleryService {
-    public void addToGallery(GalleryDto dto);
+public interface CafeService {
+    public void addToCafe(CafeDto dto);
 
     public void selectOne(Model model, int num);
 

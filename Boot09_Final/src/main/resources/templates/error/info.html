@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/error/info.html</title>
+</head>
+<body>
+	<div class="container">
+		<h3>에러 발생!</h3>
+		
+		<p>
+			에러 정보: <strong th:text="${exception.message}"></strong>
+			<br />
+			<a th:href="@{/}">홈</a>
+		</p>
+	</div>
+</body>
+</html>
