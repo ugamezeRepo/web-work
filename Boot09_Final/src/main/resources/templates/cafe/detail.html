@@ -46,8 +46,11 @@
 					</div>
 				</td>
 			</tr>
-		</tbody>
+		</table>
 		
+		<a th:href="@{/cafe/update_form(num=${dto.num})}"><button class="btn btn-primary" type="button">수정</button></a>
+		<a th:href="@{/cafe/delete(num=${dto.num})}"><button class="btn btn-primary" type="button">삭제</button></a>
+	
 		<nav>
 			<ul class="pagination justify-content-center">
 				<li class="page-item mr-3" th:if="${dto.prevNum ne 0}">
@@ -64,6 +67,8 @@
 				</li>
 			</ul>
 		</nav>
+		
+		<div th:replace="~{/cafe/includeList :: listTable}"></div>
 	</div>
 </body>
 </html>

@@ -18,47 +18,8 @@
 		<h1>카페 목록</h1>
 		
 		<a th:href="@{/cafe/insert_form}">글 작성</a>
-		<table>
-			<thead>
-				<tr>
-					<th>번호</th>
-					<th>작성자</th>
-					<th>제목</th>
-					<th>조회수</th>
-					<th>작성일</th>
-					<th>삭제</th>
-				</tr>
-			</thead>
-			<tbody th:each="tmp: ${list}">
-				<tr>
-					<td>[[${tmp.num}]]</td>
-					<td>[[${tmp.writer}]]</td>
-					<td><a th:href="@{/cafe/detail(num=${tmp.num})}">[[${tmp.title}]]</a></td>
-					<td>[[${tmp.viewCount}]]</td>
-					<td>[[${tmp.regdate}]]</td>
-				</tr>
-			</tbody>
-		</table>
 		
-		<nav>
-			<ul class="pagination justify-content-center">
-				<li th:if="${startPageNum ne 1}" class="page-item">
-					<a class="page-link" th:href="@{/cafe/list(pageNum=${startPageNum-1})}">Prev</a>
-				</li>
-				<li th:unless="${startPageNum ne 1}" class="page-item disabled">
-					<a class="page-link" href="javascript:">Prev</a>
-				</li>
-				<li th:each="i : ${#numbers.sequence(startPageNum, endPageNum)}" th:class="${i eq pageNum ? 'page-item active': 'page-item'}">
-					<a class="page-link" th:href="@{/cafe/list(pageNum=${i})}">[[${i}]]</a>
-				</li>
-				<li th:if="${endPageNum lt totalPageCount}" class="page-item">
-					<a class="page-link" th:href="@{/cafe/list(pageNum=${endPageNum+1})}">Next</a>
-				</li>
-				<li th:unless="${endPageNum lt totalPageCount}" class="page-item disabled">
-					<a class="page-link" href="javascript:">Next</a>
-				</li>
-			</ul>
-		</nav> 
+		<div th:replace="~{/cafe/includeList :: listTable}"></div>
 	</div>
 </body>
 </html>

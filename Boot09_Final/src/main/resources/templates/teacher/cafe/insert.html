@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/teacher/cafe/insert.html</title>
+</head>
+<body>
+	<div class="container">
+		<div class="card w-50 mt-5">
+			<div class="card-body">
+				<h5 class="card-title">알림</h5>
+				<p class="card-text"><strong sec:authentication="name"></strong> 님이 작성한 새글을 저장했습니다.</p>
+				<a class="btn btn-primary" th:href="@{/teacher/cafe/list}">확인</a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

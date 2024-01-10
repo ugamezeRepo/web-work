@@ -21,8 +21,9 @@ public class CafeController {
     }
     
     @GetMapping("cafe/detail")
-    public String detail(int num, Model model) {
+    public String detail(int num, Model model, @RequestParam(defaultValue = "1") int pageNum) {
         service.selectOne(model, num);
+        service.selectPage(model, pageNum);
         
         return "cafe/detail";
     }
@@ -39,4 +40,26 @@ public class CafeController {
         
         return "redirect:/cafe/list";
     }
+    
+    @GetMapping("/cafe/update_form")
+    public String updateForm(int num, Model model) {
+        service.selectOne(model, num);
+        
+        return "cafe/update_form";
+    }
+    
+    @PostMapping("/cafe/update")
+    public String update(CafeDto dto) {
+        service.updateOne(dto);
+        
+        return "redirect:/cafe/detail?num=" + dto.getNum();
+    }
+    
+    @GetMapping("/cafe/delete")
+    public String delete(int num) {
+        service.deleteOne(num);
+        
+        return "cafe/delete";
+    }
+    
 }

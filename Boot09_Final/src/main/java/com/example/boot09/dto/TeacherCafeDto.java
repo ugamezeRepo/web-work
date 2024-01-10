@@ -6,22 +6,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Alias("cafeDto")
-@Builder
+@Alias("tcafeDto")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Data
-public class CafeDto {
+public class TeacherCafeDto {
     private int num;
     private String writer;
     private String title;
-    private String Content;
+    private String content;
     private int viewCount;
     private String regdate;
-    // 페이징 처리를 위한 추가 필드
     private int startRowNum;
     private int endRowNum;
-    // 검색 기능 관련 필드
-    private String condition;
-    private String keyword;
 }

@@ -10,5 +10,7 @@ public interface CafeService {
 
     public void selectPage(Model model, int pageNum);
     
+    public void updateOne(CafeDto dto);
+    
     public void deleteOne(int num);
 }

@@ -54,6 +54,16 @@ public class CafeServiceImpl implements CafeService {
         model.addAttribute("totalPageCount", totalPageCount);
         model.addAttribute("pageNum", pageNum);
     }
+    
+    @Override
+    public void updateOne(CafeDto dto) {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        
+        if (!dto.getWriter().equals(userName)) {
+            throw new NotOwnerException("카페글을 삭제할 권한이 없습니다");
+        }
+        dao.update(dto);
+    }
 
     @Override
     public void deleteOne(int num) {
@@ -65,4 +75,6 @@ public class CafeServiceImpl implements CafeService {
         }
         dao.delete(num);
     }
+    
+    
 }
