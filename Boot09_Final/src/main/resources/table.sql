@@ -23,7 +23,9 @@ CREATE TABLE user_tbl(
 	userName VARCHAR2(20) UNIQUE,
 	password VARCHAR2(100) NOT NULL,
 	email VARCHAR2(100) UNIQUE,
-	role VARCHAR2(10) NOT NULL
+	role VARCHAR2(10) NOT NULL,
+	profile VARCHAR2(100),
+	regdate DATE
 );
 CREATE SEQUENCE user_seq;
 

@@ -3,11 +3,11 @@
 <mapper namespace="user">
 	<insert id="insert" parameterType="userDto">
 		INSERT INTO user_tbl
-		(id, userName, password, email, role)
-		VALUES(user_seq.NEXTVAL, #{userName}, #{password}, #{email}, #{role})
+		(id, userName, password, email, role, regdate)
+		VALUES(user_seq.NEXTVAL, #{userName}, #{password}, #{email}, #{role}, SYSDATE)
 	</insert>
 	<select id="getData" parameterType="String" resultType="userDto">
-		SELECT id, userName, password, email, role
+		SELECT id, userName, password, email, role, profile, regdate
 		FROM user_tbl
 		WHERE userName=#{userName}
 	</select>

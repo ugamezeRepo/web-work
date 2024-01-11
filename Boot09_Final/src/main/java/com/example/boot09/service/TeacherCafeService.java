@@ -4,7 +4,7 @@ import org.springframework.ui.Model;
 import com.example.boot09.dto.TeacherCafeDto;
 
 public interface TeacherCafeService {
-    public void getList(Model model, int pageNum);
+    public void getList(Model model, TeacherCafeDto dto);
     
     public void saveContent(TeacherCafeDto dto);
     

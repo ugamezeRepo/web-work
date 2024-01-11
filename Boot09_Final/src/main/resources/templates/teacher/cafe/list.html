@@ -33,32 +33,73 @@
                 </tr>
             </tbody>
         </table>
-
+		<!--
         <nav> 
-            <ul class="pagination">
+            <ul class="pagination" th:if="${totalPageCount ne 0}">
                 <li th:if="${startPageNum != 1}" class="page-item">
-                    <a class="page-link" th:href="@{'/teacher/cafe/list?pageNum=' + ${startPageNum - 1}}">Prev</a>
+                    <a class="page-link" th:href="@{'/teacher/cafe/list?pageNum=' + ${startPageNum - 1} + '&condition=' + ${dto.condition} + '&keyword=' + ${dto.keyword}}">
+						Prev
+                    </a>
                 </li>
                 <li th:each="i : ${#numbers.sequence(startPageNum, endPageNum)}" class="page-item" th:classappend="${i} == ${pageNum} ? 'active'">
-                    <a class="page-link" th:href="@{'/teacher/cafe/list?pageNum=' + ${i}}">[[${i}]]</a>
+                    <a class="page-link" th:href="@{/teacher/cafe/list?pageNum=__${i}__&condition=__${dto.condition}__&keyword=__${dto.keyword}__}">
+						[[${i}]]
+					</a>
                 </li>
                 <li th:if="${endPageNum < totalPageCount}" class="page-item">
-                    <a class="page-link" th:href="@{'/teacher/cafe/list?pageNum=' + ${endPageNum + 1}}">Next</a>
+                    <a class="page-link" th:href="@{/teacher/cafe/list?pageNum=__${endPageNum + 1}__&condition=__${dto.condition}__&keyword=__${dto.keyword}__}">
+						Next
+					</a>
+                </li>
+            </ul>
+        </nav>
+        -->
+        <!-- 검색 폼 -->
+        <!--
+        <form th:action="@{/teacher/cafe/list}" method="get">
+			<label for="condition">검색조건</label>
+			<select name="condition" id="condition">
+				<option value="title_content" th:selected="${dto.condition eq 'title_content'}" >제목 + 내용</option>
+				<option value="title" th:selected="${dto.condition eq 'title'}">제목</option>
+				<option value="writer" th:selected="${dto.condition eq 'writer'}">작성자</option>
+			</select>
+			<input type="text" name="keyword" placeholder="검색어" th:value="${dto.keyword}"/>
+			<button class="btn btn-primary btn-sm" type="submit">검색</button>
+			<a class="btn btn-success btn-sm" th:href="@{/teacher/cafe/list}">새로고침</a>
+		</form>
+		<p th:if="${not #strings.isEmpty(dto.keyword)}">
+			<strong th:text="${totalRow}"></strong>개의 글이 검색 되었습니다.
+		</p>
+		-->
+		<nav>
+            <ul class="pagination" th:if="${totalPageCount ne 0}">
+                <li th:if="${startPageNum != 1}" class="page-item">
+                    <a class="page-link" th:href="@{'/teacher/cafe/list?pageNum=' + ${startPageNum - 1} + '&condition=' + ${dto.condition} + '&keyword=' + ${dto.keyword} }">Prev</a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(startPageNum, endPageNum)}" class="page-item" th:classappend="${i} == ${pageNum} ? 'active'">
+                    <a class="page-link" th:href="@{'/teacher/cafe/list?pageNum=' + ${i} + '&condition=' + ${dto.condition} + '&keyword=' + ${dto.keyword}}">[[${i}]]</a>
+                </li>
+                <li th:if="${endPageNum < totalPageCount}" class="page-item">
+                    <a class="page-link" th:href="@{'/teacher/cafe/list?pageNum=' + ${endPageNum + 1} + '&condition=' + ${dto.condition} + '&keyword=' + ${dto.keyword}}">Next</a>
                 </li>
             </ul>
         </nav>
         
         <!-- 검색 폼 -->
-        <form th:action="@{/teacher/cafe/list}" method="get">
+        <form th:action="@{/cafe/list}" method="get">
 			<label for="condition">검색조건</label>
 			<select name="condition" id="condition">
-				<option value="title_content">제목 + 내용</option>
-				<option value="title">제목</option>
-				<option value="writer">작성자</option>
-			</select>
-			<input type="text" name="keyword" placeholder="검색어" />
-			<button type="submit">검색</button>
+				<option value="title_content" th:selected="${dto.condition eq 'title_content'}">제목 + 내용</option>
+				<option value="title" th:selected="${dto.condition eq 'title'}">제목</option>
+				<option value="writer" th:selected="${dto.condition eq 'writer'}">작성자</option>
+			</select>	
+			<input type="text" name="keyword" placeholder="검색어..." th:value="${dto.keyword}"/>
+			<button class="btn btn-primary btn-sm" type="submit">검색</button>
+			<a class="btn btn-success btn-sm" th:href="@{/teacher/cafe/list}">새로고침</a>
 		</form>
+		<p th:if="${not #strings.isEmpty(dto.keyword)}">
+			<strong th:text="${totalRow}"></strong> 개의 글이 검색 되었습니다
+		</p>
     </div>
 </body>
 </html>

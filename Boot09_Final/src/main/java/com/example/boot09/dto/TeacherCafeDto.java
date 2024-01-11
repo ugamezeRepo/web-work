@@ -20,4 +20,8 @@ public class TeacherCafeDto {
     private String regdate;
     private int startRowNum;
     private int endRowNum;
+    // 검색 기능 관련 필드
+    private String condition = "";
+    private String keyword = "";
+    private int pageNum = 1;
 }

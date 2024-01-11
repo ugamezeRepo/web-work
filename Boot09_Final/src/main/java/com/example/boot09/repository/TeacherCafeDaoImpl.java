@@ -4,7 +4,6 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import com.example.boot09.dto.CafeDto;
 import com.example.boot09.dto.TeacherCafeDto;
 
 @Repository
@@ -14,6 +13,7 @@ public class TeacherCafeDaoImpl implements TeacherCafeDao{
 
     @Override
     public List<TeacherCafeDto> getList(TeacherCafeDto dto) {
+        System.out.println("Listdto: " + dto);
         /*
          *  mapper's namespace => tcafe
          *  sql's id => getList
@@ -27,10 +27,10 @@ public class TeacherCafeDaoImpl implements TeacherCafeDao{
     }
     
     @Override
-    public int getCount() {
+    public int getCount(TeacherCafeDto dto) {
         
-        // 전체 글의 개수 리턴
-        return session.selectOne("tcafe.getCount");
+        // 검색 키워드가 있다면 검색 키워드에 맞는 글의 개수만 가져올 수 있도록 파라미터로 TeacherCafeDto를 전달한다 
+        return session.selectOne("tcafe.getCount", dto);
     }
 
     @Override
@@ -41,6 +41,7 @@ public class TeacherCafeDaoImpl implements TeacherCafeDao{
     @Override
     public TeacherCafeDto getData(int num) {
         
+        // 검색 키워드가 있다면 검색 키워드에 맞는 글의 개수만 리턴
         return session.selectOne("tcafe.getData", num);
     }
     

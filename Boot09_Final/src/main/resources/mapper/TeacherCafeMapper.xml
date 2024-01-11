@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="tcafe">
+
+	<sql id="search">
+		<choose>
+			<when test="condition == 'title_content'">
+				WHERE title LIKE '%'||#{keyword}||'%' OR content LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="condition == 'title'">
+				WHERE title LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="condition == 'writer'">
+				WHERE writer LIKE '%'||#{keyword}||'%'
+			</when>
+		</choose>
+	</sql>
+	
+	<sql id="column">
+		num, writer, title, viewCount, TO_CHAR(regdate, 'YYYY.MM.DD HH24:MI') AS regdate
+	</sql>
+
 	<update id="update" parameterType="tcafeDto">
 		UPDATE board_cafe
 		SET title=#{title}, content=#{content}
@@ -12,10 +31,21 @@
 		(num, writer, title, content, viewCount, regdate)
 		VALUES (board_cafe_seq.NEXTVAL, #{writer}, #{title}, #{content}, 0, SYSDATE)
 	</insert>
-
-	<select id="getData" parameterType="int" resultType="tcafeDto">
-		SELECT num, writer, title, content, viewCount, regdate
-		FROM board_cafe
+	<!-- 
+		<select id="getData" parameterType="int" resultType="tcafeDto">
+			SELECT <include refid="column" />
+			FROM board_cafe
+			WHERE num=#{num}
+		</select>
+	 -->
+	<select id="getData" parameterType="int" resultType="cafeDto">
+		SELECT *
+		FROM 
+			(SELECT num, writer, title, content, viewCount, regdate,
+				LAG(num, 1, 0) OVER (ORDER BY num DESC) prevNum,
+				LEAD(num, 1, 0) OVER (ORDER BY num DESC) nextNum
+			FROM board_cafe
+			ORDER BY num DESC)
 		WHERE num=#{num}
 	</select>
 
@@ -24,15 +54,17 @@
 		FROM
 			(SELECT result1.*, ROWNUM AS rnum
 			FROM
-				(SELECT num, writer, title, content, viewCount, TO_CHAR(regdate, 'YYYY.MM.DD HH24:MI') AS regdate
+				(SELECT <include refid="column" />
 				FROM board_cafe
+				<include refid="search" />
 				ORDER BY num DESC) result1)
 		WHERE rnum BETWEEN #{startRowNum} AND #{endRowNum}
 	</select>
-	
-	<select id="getCount" resultType="int" >
+
+	<select id="getCount" parameterType="cafeDto" resultType="int">
 		SELECT NVL(MAX(ROWNUM), 0)
 		FROM board_cafe
+		<include refid="search"/>
 	</select>
 	
 	<delete id="delete" parameterType="int">

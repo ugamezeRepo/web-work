@@ -18,7 +18,8 @@ public class TeacherCafeServiceImpl implements TeacherCafeService {
     final int PAGE_DISPLAY_COUNT = 5;
     
     @Override
-    public void getList(Model model, int pageNum) {
+    public void getList(Model model, TeacherCafeDto dto) {
+        int pageNum = dto.getPageNum();
         //보여줄 페이지의 시작 ROWNUM
         int startRowNum = 1 + (pageNum - 1) * PAGE_ROW_COUNT;
         //보여줄 페이지의 끝 ROWNUM
@@ -29,7 +30,7 @@ public class TeacherCafeServiceImpl implements TeacherCafeService {
         //하단 끝 페이지 번호
         int endPageNum = startPageNum + PAGE_DISPLAY_COUNT - 1;
         //전체 글의 갯수
-        int totalRow = tcafeDao.getCount();
+        int totalRow = tcafeDao.getCount(dto);
         //전체 페이지의 갯수 구하기
         int totalPageCount = (int) Math.ceil(totalRow / (double) PAGE_ROW_COUNT);
         //끝 페이지 번호가 이미 전체 페이지 갯수보다 크게 계산되었다면 잘못된 값이다.
@@ -37,8 +38,6 @@ public class TeacherCafeServiceImpl implements TeacherCafeService {
             endPageNum = totalPageCount; //보정해 준다. 
         }
 
-        //TeacherCafeDto 객체를 생성해서 
-        TeacherCafeDto dto = new TeacherCafeDto();
         //위에서 계산된 startRowNum 과 endRowNum 을 담고
         dto.setStartRowNum(startRowNum);
         dto.setEndRowNum(endRowNum);
@@ -51,6 +50,8 @@ public class TeacherCafeServiceImpl implements TeacherCafeService {
         model.addAttribute("endPageNum", endPageNum);
         model.addAttribute("totalPageCount", totalPageCount);
         model.addAttribute("pageNum", pageNum);
+        model.addAttribute("dto", dto); // 키워드 정보가 들어있는 dto 모델에 담기
+        model.addAttribute("totalRow", totalRow);
     }
     
     @Override

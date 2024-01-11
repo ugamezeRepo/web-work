@@ -1,9 +1,10 @@
 package com.example.boot09.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.ui.Model;
 import com.example.boot09.dto.UserDto;
 import com.example.boot09.repository.UserDao;
 
@@ -28,6 +29,17 @@ public class UserServiceImpl implements UserService{
 		//DB 에 저장한다.
 		dao.insert(dto);
 	}
+
+    @Override
+    public void getInfo(Model model) {
+        // 로그인된 userName
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        // 사용자 정보를 읽어와서
+        UserDto dto = dao.getData(userName);
+        // Model 객체에 담는다.
+        model.addAttribute("dto", dto);
+
+    }
 
 }
 

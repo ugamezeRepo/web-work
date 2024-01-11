@@ -6,7 +6,7 @@ import com.example.boot09.dto.TeacherCafeDto;
 public interface TeacherCafeDao {
     public List<TeacherCafeDto> getList(TeacherCafeDto dto);
 
-    public int getCount();
+    public int getCount(TeacherCafeDto dto);
     
     public void insert(TeacherCafeDto dto);
     
