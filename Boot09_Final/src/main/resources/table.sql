@@ -1,6 +1,8 @@
 SELECT * FROM user_tbl;
 SELECT * FROM board_gallery;
 SELECT * FROM board_cafe;
+SELECT * FROM board_file;
+-- SELECT num, writer, title, orgFileName, saveFileName, fileSize, regdate FROM board_file;
 -- LAG(칼럼명, 칸수, 존재하지 않을 시 기본값) OVER (정렬조건)
 SELECT *
 FROM
@@ -10,6 +12,16 @@ FROM
 	FROM board_gallery
 	ORDER BY num DESC)
 WHERE num=28;
+
+-- 페이징 처리를 하기위해서는 1. 정렬 2. 행번호 부여 3. 원하는 행만 select
+SELECT *
+FROM
+	(SELECT result1.*, ROWNUM AS rnum
+	FROM
+		(SELECT num, writer, title, orgFileName, fileSize, regdate
+		FROM board_file
+		ORDER BY num DESC) result1)
+WHERE rnum BETWEEN 6 AND 10
 
 DROP TABLE user_tbl;
 DROP TABLE board_gallery;
@@ -48,3 +60,14 @@ CREATE TABLE board_cafe (
 );
 CREATE SEQUENCE board_cafe_seq;
 
+-- 업로드된 파일의 정보를 저장할 테이블
+CREATE TABLE board_file(
+	num NUMBER PRIMARY KEY,
+	writer VARCHAR2(100) NOT NULL,
+	title VARCHAR2(100) NOT NULL,
+	orgFileName VARCHAR2(100) NOT NULL, -- 원본 파일명
+	saveFileName VARCHAR2(100) NOT NULL, -- 서버에 실제로 저장된 파일명
+	fileSize NUMBER NOT NULL, -- 파일의 크기 
+	regdate DATE
+);
+CREATE SEQUENCE board_file_seq; 

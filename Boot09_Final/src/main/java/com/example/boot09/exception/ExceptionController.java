@@ -8,6 +8,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionController {
     
+    @ExceptionHandler(PasswordException.class)
+    public String password(PasswordException pe, Model model) {
+        model.addAttribute("exception", pe);
+        
+        return "error/password";
+    }
+    
     // Spring Framework가 동작하는 중에 NotOwnerException type의 예외가 발생하면 호출되는 메서드 
     @ExceptionHandler(NotOwnerException.class)
     public String notOwner(NotOwnerException noe, Model model) { // 메서드의 매개 변수에 예외 객체의 참조값이 전달된다.
@@ -17,4 +24,5 @@ public class ExceptionController {
         // view 페이지에서 에러 정보를 응답한다.
         return "error/info";
     }
+    
 }

@@ -26,9 +26,15 @@ public class TeacherCafeController {
         return "redirect:/teacher/cafe/detail?num=" + dto.getNum();
     }
     
+    @GetMapping("/teacher/cafe/delete")
+    public String delete(int num) {
+        service.deleteContent(num);
+        
+        return "redirect:/teacher/cafe/list";
+    }
+    
     @GetMapping("/teacher/cafe/detail")
     public String detail(Model model, int num) {
-        
         service.getDetail(model, num);
         
         return "teacher/cafe/detail";

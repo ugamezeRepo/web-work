@@ -13,7 +13,6 @@ public class TeacherCafeDaoImpl implements TeacherCafeDao{
 
     @Override
     public List<TeacherCafeDto> getList(TeacherCafeDto dto) {
-        System.out.println("Listdto: " + dto);
         /*
          *  mapper's namespace => tcafe
          *  sql's id => getList
@@ -40,7 +39,7 @@ public class TeacherCafeDaoImpl implements TeacherCafeDao{
 
     @Override
     public TeacherCafeDto getData(int num) {
-        
+
         // 검색 키워드가 있다면 검색 키워드에 맞는 글의 개수만 리턴
         return session.selectOne("tcafe.getData", num);
     }

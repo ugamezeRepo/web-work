@@ -10,7 +10,7 @@ package com.example.boot09.exception;
  *     생성자에 전달받았던 예외 메세지를 리턴해준다.
  */
 
-public class NotOwnerException extends RuntimeException{
+public class NotOwnerException extends RuntimeException {
 
     public NotOwnerException(String message) {
         super(message);

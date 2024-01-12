@@ -13,7 +13,6 @@ public class CafeDaoImpl implements CafeDao {
     @Override
     public void insert(CafeDto dto) {
         session.insert("cafe.insert", dto);
-        
     }
 
     @Override

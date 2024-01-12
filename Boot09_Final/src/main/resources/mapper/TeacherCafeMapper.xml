@@ -38,7 +38,7 @@
 			WHERE num=#{num}
 		</select>
 	 -->
-	<select id="getData" parameterType="int" resultType="cafeDto">
+	<select id="getData" parameterType="int" resultType="tcafeDto">
 		SELECT *
 		FROM 
 			(SELECT num, writer, title, content, viewCount, regdate,
