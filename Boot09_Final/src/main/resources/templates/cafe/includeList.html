@@ -26,7 +26,7 @@
 					<td>[[${tmp.regdate}]]</td>
 					<td th:if="${tmp.writer ne null}">
 						<a class="btn btn-danger" th:href="@{/cafe/delete(num=${tmp.num})}">
-							삭제 <span th:text="${session.userName}"></span>
+							삭제 	<span th:text="${session.userName}"></span>
 						</a>
 					</td>
 				</tr>

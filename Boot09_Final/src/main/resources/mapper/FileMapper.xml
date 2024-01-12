@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="file">
+	<insert id="upload" parameterType="fileDto">
+		INSERT INTO board_file
+		(num, writer, title, orgFileName, saveFileName, fileSize, regdate)
+		VALUES (board_file_seq.NEXTVAL, #{writer}, #{title},
+			#{orgFileName}, #{saveFileName}, #{fileSize}, SYSDATE)
+	</insert>
+    
+    <select id="getData" parameterType="int" resultType="fileDto">
+	    SELECT *
+	    FROM
+	    	(SELECT <include refid="column" />,
+	    		LAG(num, 1, 0) OVER (ORDER BY num DESC) prevNum,
+				LEAD(num, 1, 0) OVER (ORDER BY num DESC) nextNum
+			FROM board_file
+			ORDER BY num DESC)
+		WHERE num=#{num}
+    </select>
+    
+    <select id="getList" parameterType="fileDto" resultType="fileDto">
+		SELECT *
+		FROM
+			(SELECT result1.*, ROWNUM AS rnum
+			FROM
+				(SELECT <include refid="column" />
+				FROM board_file
+				ORDER BY num DESC) result1)
+		WHERE rnum BETWEEN #{startRowNum} AND #{endRowNum}
+	</select>
+    
+	<select id="getCount" resultType="int" >
+		SELECT NVL(MAX(ROWNUM), 0)
+		FROM board_file
+	</select>
+	
+    <sql id="search">
+		<choose>
+			<when test="condition == 'title_content'">
+				WHERE title LIKE '%'||#{keyword}||'%' OR content LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="condition == 'title'">
+				WHERE title LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="condition == 'writer'">
+				WHERE writer LIKE '%'||#{keyword}||'%'
+			</when>
+		</choose>
+	</sql>
+	
+	<sql id="column">
+		num, writer, title, orgFileName, saveFileName, fileSize, TO_CHAR(regdate, 'YYYY.MM.DD HH24:MI') AS regdate
+	</sql>
+</mapper>

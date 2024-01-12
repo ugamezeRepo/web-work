@@ -43,7 +43,7 @@
 				</td>
 			</tr>
 		</table>
-		
+
 		<th:block th:if="${dto.writer eq userName}">
 			<a class="btn btn-outline-success btn-sm" th:href="@{'/teacher/cafe/updateform?num=' + ${dto.num}}">수정</a>
 			<a class="btn btn-outline-danger btn-sm" href="javascript:" onclick="deleteConfirm()">삭제</a>

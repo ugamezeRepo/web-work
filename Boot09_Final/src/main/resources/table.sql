@@ -23,12 +23,24 @@ FROM
 		ORDER BY num DESC) result1)
 WHERE rnum BETWEEN 6 AND 10
 
+-- board_file
+SELECT *
+FROM
+	(SELECT result1.*, ROWNUM AS rnum
+	FROM
+		(SELECT num, writer, title, orgFileName, saveFileName, fileSize, TO_CHAR(regdate, 'YYYY.MM.DD HH24:MI') AS regdate
+		FROM board_file
+		ORDER BY num DESC) result1)
+WHERE rnum BETWEEN 1 AND 10
+
 DROP TABLE user_tbl;
 DROP TABLE board_gallery;
 DROP TABLE board_cafe;
+DROP TABLE board_file;
 DROP SEQUENCE user_seq;
 DROP SEQUENCE board_gallery_seq;
 DROP SEQUENCE board_cafe_seq;
+DROP SEQUENCE board_file_seq; 
 
 CREATE TABLE user_tbl(
 	id NUMBER PRIMARY KEY,
