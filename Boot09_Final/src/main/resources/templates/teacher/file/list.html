@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>/file/list</title>
+<title>/teacher/file/list</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </head>
@@ -14,7 +14,7 @@
 		    <li class="breadcrumb-item active">File</li>
 		  </ol>
 		</nav>
-		<a th:href="@{/file/upload_form}">업로드하러 가기</a>
+		<a th:href="@{/teacher/file/upload_form}">새 자료 올리기</a>
 
 		<h1>자료실</h1>
 		<table class="table table-stripped">
@@ -24,26 +24,18 @@
 					<th>작성자</th>
 					<th>제목</th>
 					<th>파일명</th>
-					<th>크기</th>
 					<th>등록일</th>
-					<th>삭제</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="tmp: ${list}">
-					<td>[[${tmp.num}]]</td>
-					<td>[[${tmp.writer}]]</td>
-					<td>[[${tmp.title}]]</td>
+					<td th:text="${tmp.num}"></td>
+					<td th:text="${tmp.writer}"></td>
+					<td th:text="${tmp.title}"></td>
 					<td>
-						<a th:href="@{/file/download?num=__${tmp.num}__}">[[${tmp.orgFileName}]]</a>
+						<a th:href="@{/teacher/file/download(num=${tmp.num})}" th:text="${tmp.orgFileName}"></a>
 					</td>
-					<td>[[${tmp.fileSize}]] Bytes</td>
-					<td>[[${tmp.regdate}]]</td>
-					<td>
-						<th:block th:if="${tmp.writer eq #authentication.name}">
-							<a th:href="@{/file/delete?num=__${tmp.num}__}">삭제</a>
-						</th:block>
-					</td>
+					<td th:text="${tmp.regdate}"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -52,7 +44,7 @@
 		<nav> 
             <ul class="pagination justify-content-center mt-3" th:if="${totalPageCount ne 0}">
                 <li th:if="${startPageNum != 1}" class="page-item">
-                    <a class="page-link" th:href="@{/file/list?pageNum=__${startPageNum - 1}__&condition=__${dto.condition}__&keyword=__${dto.keyword}__}">
+                    <a class="page-link" th:href="@{/teacher/file/list?pageNum=__${startPageNum - 1}__&condition=__${dto.condition}__&keyword=__${dto.keyword}__}">
 						Prev
                     </a>
                 </li>
@@ -60,12 +52,12 @@
 					<a class="page-link" href="javascript:">Prev</a>
 				</li>
                 <li th:each="i : ${#numbers.sequence(startPageNum, endPageNum)}" class="page-item" th:classappend="${i} == ${pageNum} ? 'active'">
-                    <a class="page-link" th:href="@{/file/list?pageNum=__${i}__&condition=__${dto.condition}__&keyword=__${dto.keyword}__}">
+                    <a class="page-link" th:href="@{/teacher/file/list?pageNum=__${i}__&condition=__${dto.condition}__&keyword=__${dto.keyword}__}">
 						[[${i}]]
 					</a>
                 </li>
                 <li th:if="${endPageNum < totalPageCount}" class="page-item">
-                    <a class="page-link" th:href="@{/file/list?pageNum=__${endPageNum + 1}__&condition=__${dto.condition}__&keyword=__${dto.keyword}__}">
+                    <a class="page-link" th:href="@{/teacher/file/list?pageNum=__${endPageNum + 1}__&condition=__${dto.condition}__&keyword=__${dto.keyword}__}">
 						Next
 					</a>
                 </li>
@@ -74,6 +66,22 @@
 				</li>
             </ul>
         </nav>
+        
+        <!-- 검색 폼 -->
+        <form th:action="@{/teacher/file/list}" method="get">
+			<label for="condition">검색조건</label>
+			<select name="condition" id="condition">
+				<option value="title_filename" th:selected="${dto.condition eq 'title_filename'}" >제목 + 내용</option>
+				<option value="title" th:selected="${dto.condition eq 'title'}">제목</option>
+				<option value="writer" th:selected="${dto.condition eq 'writer'}">작성자</option>
+			</select>
+			<input type="text" name="keyword" placeholder="검색어" th:value="${dto.keyword}"/>
+			<button class="btn btn-primary btn-sm" type="submit">검색</button>
+			<a class="btn btn-success btn-sm" th:href="@{/teacher/file/list}">새로고침</a>
+		</form>
+		<p th:if="${not #strings.isEmpty(dto.keyword)}">
+			<strong th:text="${totalRow}"></strong>개의 글이 검색 되었습니다.
+		</p>
 	</div>
 </body>
 </html>

@@ -22,7 +22,8 @@ public class SecurityConfig {
 				"/user/loginform", "/user/login_fail", "/user/expired",
 				"/gallery/list", "/gallery/detail", "/upload/images/**",
 				"/cafe/list", "cafe/detail", "/teacher/cafe/list", "/teacher/cafe/detail",
-				"/file/list", "/file/detail"
+				"/file/list", "/file/detail", "/file/download",
+				"/teacher/file/list", "/teacher/file/detail", "/teacher/file/download"
 		};
 		
 		//메소드의 매개변수에 HttpSecurity 의 참조값이 전달되는데 해당 객체를 이용해서 설정을 한다음

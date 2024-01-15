@@ -1,7 +1,6 @@
 package com.example.boot09.service;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.boot09.dto.FileDto;
-import com.example.boot09.dto.TeacherCafeDto;
 import com.example.boot09.repository.FileDao;
 
 @Service
@@ -66,6 +64,7 @@ public class FileServiceImpl implements FileService{
         model.addAttribute("totalPageCount", totalPageCount);
         model.addAttribute("dto", dto);
         model.addAttribute("totalRow", totalRow);
+        model.addAttribute("pageNum", pageNum);
     }
     
     @Override

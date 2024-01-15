@@ -13,6 +13,14 @@ public class Boot09FinalApplication {
 		SpringApplication.run(Boot09FinalApplication.class, args);
 		
 		GalleryDto dto = new GalleryDto();
+		
+		String os = System.getProperty("os.name").toLowerCase();
+		if (os.contains("win")) {
+		    System.out.println("OS : Windows");
+		    
+		} else if (os.contains("mac")) {
+		    System.out.println("OS : Mac");
+		}
 	}
 
 }
