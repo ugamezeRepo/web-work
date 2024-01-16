@@ -24,4 +24,6 @@ public class TeacherCafeDto {
     private String condition = "";
     private String keyword = "";
     private int pageNum = 1;
+    // 이전 글과 다음 글의 글번호를 담을 필드
+    private int prevNum, nextNum;
 }

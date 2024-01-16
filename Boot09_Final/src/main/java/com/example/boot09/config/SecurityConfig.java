@@ -28,7 +28,8 @@ public class SecurityConfig {
 		
 		//메소드의 매개변수에 HttpSecurity 의 참조값이 전달되는데 해당 객체를 이용해서 설정을 한다음
 		httpSecurity
-		.csrf(csrf->csrf.disable())
+		.headers(headers -> headers.frameOptions().sameOrigin())
+		.csrf(csrf -> csrf.disable())
 		.authorizeHttpRequests(config -> 
 			config
 				.requestMatchers(whiteList).permitAll() //whiteList 요청은 로그인과 상관없이 모두 허용

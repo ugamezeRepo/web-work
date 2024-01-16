@@ -8,6 +8,13 @@
 </head>
 <body>
     <div class="container">
+		<nav>
+		  <ol class="breadcrumb">
+		    <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+		    <li class="breadcrumb-item active">Cafe</li>
+		  </ol>
+		</nav>
+		
         <h1>게시글 목록 입니다</h1>
 
         <a th:href="@{/teacher/cafe/insertform}">새글 작성</a>
@@ -26,7 +33,7 @@
                     <td th:text="${tmp.num}"></td>
                     <td th:text="${tmp.writer}"></td>
                     <td>
-                        <a th:href="@{'/teacher/cafe/detail?num=' + ${tmp.num}}" th:text="${tmp.title}"></a>
+                        <a th:href="@{/teacher/cafe/detail(num=${tmp.num}, condition=${dto.condition}, keyword=${dto.keyword})}" th:text="${tmp.title}"></a>
                     </td>
                     <td th:text="${tmp.viewCount}"></td>
                     <td th:text="${tmp.regdate}"></td>

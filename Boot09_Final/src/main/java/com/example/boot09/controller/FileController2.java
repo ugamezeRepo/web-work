@@ -22,11 +22,10 @@ public class FileController2 {
         return "teacher/file/list";
     }
     
-    
     @GetMapping("/teacher/file/download")
     public ResponseEntity<InputStreamResource> download(int num) {
         
-        return null;
+        return service.getFileData(num);
     }
     
     @GetMapping("/teacher/file/upload_form")
@@ -40,6 +39,13 @@ public class FileController2 {
         service.saveFile(dto);
         
         return "teacher/file/upload";
+    }
+    
+    @GetMapping("/teacher/file/delete")
+    public String delete(int num) {
+        service.deleteFile(num);
+        
+        return "redirect:/file/list";
     }
     
 }

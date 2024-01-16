@@ -3,7 +3,6 @@ package com.example.boot09.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.boot09.dto.FileDto2;
+import com.example.boot09.exception.NotOwnerException;
 import com.example.boot09.repository.FileDao2;
 
 @Service
@@ -131,7 +131,18 @@ public class FileServiceImpl2 implements FileService2{
     
     @Override
     public void deleteFile(int num) {
-        // TODO Auto-generated method stub
+        // DB에서 삭제할 파일의 정보를 읽어온다.
+        FileDto2 dto = dao.getData(num);
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (!dto.getWriter().equals(userName)) {
+            throw new NotOwnerException("파일을 삭제할 권한이 없습니다.");
+        }
+        // 파일 시스템에서 실제로 삭제하고
+        String filePath = fileLocation + File.separator + dto.getSaveFileName();
+        File f = new File(filePath);
+        f.delete();
+        // DB에서도 삭제
+        dao.delete(num);
         
     }
     

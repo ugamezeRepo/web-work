@@ -12,9 +12,12 @@ public interface FileService2 {
     
     public void getDetail(Model model, int num);
     
+    // 다운로드할 파일 하나의 정보 읽어오기
     public ResponseEntity<InputStreamResource> getFileData(int num);
     
     public void updateFile(Model model, int num);
     
+    // 파일 삭제
     public void deleteFile(int num);
+    
 }

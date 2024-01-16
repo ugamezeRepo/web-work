@@ -34,8 +34,8 @@ public class TeacherCafeController {
     }
     
     @GetMapping("/teacher/cafe/detail")
-    public String detail(Model model, int num) {
-        service.getDetail(model, num);
+    public String detail(Model model, TeacherCafeDto dto) {
+        service.getDetail(model, dto);
         
         return "teacher/cafe/detail";
     }
@@ -44,8 +44,9 @@ public class TeacherCafeController {
     public String insert(TeacherCafeDto dto) {
         //서비스를 이용해서 새글을 저장한다
         service.saveContent(dto);
-        
-        return "teacher/cafe/insert";
+        System.out.println("dto : " + dto);
+        return null;
+        // return "teacher/cafe/insert";
     }
     
     @GetMapping("/teacher/cafe/insertform")
@@ -56,7 +57,6 @@ public class TeacherCafeController {
 
     @GetMapping("/teacher/cafe/list")
     public String list(Model model, TeacherCafeDto dto) {
-        
         //dto 에는 검색키워드가 있을수도 있고 없을수도 있다
         service.getList(model, dto);
         

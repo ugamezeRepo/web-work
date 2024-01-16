@@ -24,7 +24,6 @@ public class TeacherCafeServiceImpl implements TeacherCafeService {
         int startRowNum = 1 + (pageNum - 1) * PAGE_ROW_COUNT;
         //보여줄 페이지의 끝 ROWNUM
         int endRowNum = pageNum * PAGE_ROW_COUNT;
-
         //하단 시작 페이지 번호 
         int startPageNum = 1 + ((pageNum - 1) / PAGE_DISPLAY_COUNT) * PAGE_DISPLAY_COUNT;
         //하단 끝 페이지 번호
@@ -41,7 +40,6 @@ public class TeacherCafeServiceImpl implements TeacherCafeService {
         //위에서 계산된 startRowNum 과 endRowNum 을 담고
         dto.setStartRowNum(startRowNum);
         dto.setEndRowNum(endRowNum);
-
         //TeacherCafeDto 를 인자로 전달해서 글목록 얻어오기
         List<TeacherCafeDto> list = dao.getList(dto);
         
@@ -60,18 +58,22 @@ public class TeacherCafeServiceImpl implements TeacherCafeService {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         dto.setWriter(userName);
         // DB에 저장
+        dao.insert(dto);
         
     }
     
     @Override
-    public void getDetail(Model model, int num) {
+    public void getDetail(Model model, TeacherCafeDto dto) {
         // 글번호를 이용해서 글 하나의 정보를 얻어와서 
-        TeacherCafeDto dto = dao.getData(num);
+        TeacherCafeDto resultDto = dao.getDetail(dto);
+        // 원래의 검색 조건을 글 정보가 들어있는 resultDto에 추가
+        resultDto.setCondition(dto.getCondition());
+        resultDto.setKeyword(dto.getKeyword());
         // userName 도 읽어와서 담아준다(로그인 되지 않았다면 null 이다)
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         
         // Model 객체에 담아준다.
-        model.addAttribute("dto", dto);
+        model.addAttribute("dto", resultDto);
         model.addAttribute("userName", userName);
     }
     

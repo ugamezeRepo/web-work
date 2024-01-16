@@ -34,7 +34,8 @@ public class TeacherCafeDaoImpl implements TeacherCafeDao{
 
     @Override
     public void insert(TeacherCafeDto dto) {
-        session.insert("tcafe.insert", dto);
+        System.out.println(dto);
+        // session.insert("tcafe.insert", dto);
     }
 
     @Override
@@ -42,6 +43,12 @@ public class TeacherCafeDaoImpl implements TeacherCafeDao{
 
         // 검색 키워드가 있다면 검색 키워드에 맞는 글의 개수만 리턴
         return session.selectOne("tcafe.getData", num);
+    }
+    
+    @Override
+    public TeacherCafeDto getDetail(TeacherCafeDto dto) {
+        
+        return session.selectOne("tcafe.getDetail", dto);
     }
     
     @Override

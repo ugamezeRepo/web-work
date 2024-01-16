@@ -12,6 +12,8 @@ public interface TeacherCafeDao {
     
     public TeacherCafeDto getData(int num);
     
+    public TeacherCafeDto getDetail(TeacherCafeDto dto);
+    
     public void delete(int num); 
     
     public void update(TeacherCafeDto dto);
