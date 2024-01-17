@@ -34,8 +34,7 @@ public class TeacherCafeDaoImpl implements TeacherCafeDao{
 
     @Override
     public void insert(TeacherCafeDto dto) {
-        System.out.println(dto);
-        // session.insert("tcafe.insert", dto);
+        session.insert("tcafe.insert", dto);
     }
 
     @Override

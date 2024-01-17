@@ -95,7 +95,6 @@ public class TeacherCafeServiceImpl implements TeacherCafeService {
     public void getData(Model model, int num) {
         TeacherCafeDto dto = dao.getData(num);
         model.addAttribute("dto", dto);
-        
     }
     
     @Override

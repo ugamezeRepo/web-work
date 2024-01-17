@@ -32,7 +32,7 @@
 	</insert>
 	
 	<select id="getData" parameterType="int" resultType="tcafeDto">
-		SELECT <include refid="column" />,
+		SELECT <include refid="column" />
 		FROM board_cafe
 		WHERE num=#{num}
 	</select>

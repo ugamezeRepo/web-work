@@ -44,9 +44,8 @@ public class TeacherCafeController {
     public String insert(TeacherCafeDto dto) {
         //서비스를 이용해서 새글을 저장한다
         service.saveContent(dto);
-        System.out.println("dto : " + dto);
-        return null;
-        // return "teacher/cafe/insert";
+        
+        return "teacher/cafe/insert";
     }
     
     @GetMapping("/teacher/cafe/insertform")
