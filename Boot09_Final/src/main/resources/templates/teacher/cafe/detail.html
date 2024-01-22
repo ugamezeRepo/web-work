@@ -10,6 +10,24 @@
 		border-radius: 5px;
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 	}
+	
+	.comment-form, .re-insert-form {
+		display: flex;
+	}
+	
+	.comment-form textarea, .re-insert-form textarea {
+		height: 100px;
+		flex-grow: 1;
+	}
+	
+	.comment-form button, .re-insert-form button {
+		flex-basis: 100px;
+	}
+	
+	/* 대댓글 폼은 일단 숨겨놓는다. */
+	.re-insert-form {
+		display: none;
+	}
 </style>
 </head>
 <body>
@@ -73,6 +91,65 @@
 				}
 			</script>
 		</th:block>
+		
+		
+		<h4>댓글을 입력해주세요</h4>
+		<!-- 원글에 댓글을 작성할 폼 -->
+		<form class="comment-form" th:action="@{/teacher/cafe/comment_insert}" method="post">
+			<!-- 원글의 글번호가 댓글의 ref_group 번호가 된다. -->
+			<input type="hidden" name="ref_group" th:value="${dto.num}" />
+			<!-- 원글의 작성자가 댓글의 대상자가 된다. -->
+			<input type="hidden" name="target_id" th:value="${dto.writer}" />
+			<textarea name="content">[[${session.userName == null ? "댓글 작성을 위해 로그인이 필요합니다." : ""}]]</textarea>
+			<button type="submit">등록</button>
+		</form>
+		
+		<!-- 댓글 목록 -->
+		<div class="comments">
+			<ul>
+				<li th:each="tmp: ${commentList}">
+					<dl>
+						<dt>
+							<span th:text="${tmp.writer}"></span>
+							<span th:text="${tmp.regdate}"></span>
+							<a th:attr="data-num=${tmp.num}" class="reply-link" href="javascript:">답글</a>
+						</dt>
+						<dd>
+							<pre>[[${tmp.content}]]</pre>
+						</dd>
+					</dl>
+					<!-- 댓글의 댓글 작성할 폼 미리 출력 -->
+					<form th:id="'reForm' + ${tmp.num}" class="re-insert-form" th:action="@{/teacher/cafe/comment_insert}" method="post">
+						<input type="hidden" name="ref_group" th:value="${dto.num}" />
+						<input type="hidden" name="target_id" th:value="${tmp.writer}" />
+						<input type="hidden" name="comment_group" th:value="${tmp.comment_group}" />
+						<textarea name="content"></textarea>
+						<button type="submit">등록</button>
+					</form>
+				</li>
+			</ul>
+		</div>
 	</div>
+	
+	<script>
+		const replyLinks = document.querySelectorAll(".reply-link");
+		// 반복문 돌면서 모든 링크에 이벤트 리스너 함수 등록
+		replyLinks.forEach(item => {
+			item.addEventListener("click", e => {
+				// 클릭한 a 요소의 data-num 속성의 value 값을 읽어온다.
+				const num = e.target.getAttribute("data-num");
+				// 보여주거나 숨길 form의 참조값 얻어내기
+				const form = document.querySelector("#reForm" + num);
+				if (e.target.innerText.includes("취소")) {
+					form.style.display = "none";
+					e.target.innerText = "답글";
+				} else if (e.target.innerText.includes("답글")) {
+					// 보이게 하기
+					form.style.display = "flex";
+					e.target.innerText = "취소";
+				}
+			});
+		});
+	</script>
 </body>
 </html>

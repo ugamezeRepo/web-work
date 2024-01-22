@@ -1,7 +1,9 @@
 SELECT * FROM user_tbl;
 SELECT * FROM board_gallery;
 SELECT * FROM board_cafe;
+SELECT * FROM board_cafe_comment;
 SELECT * FROM board_file;
+
 -- SELECT num, writer, title, orgFileName, saveFileName, fileSize, regdate FROM board_file;
 -- LAG(칼럼명, 칸수, 존재하지 않을 시 기본값) OVER (정렬조건)
 SELECT *
@@ -36,10 +38,12 @@ WHERE rnum BETWEEN 1 AND 10
 DROP TABLE user_tbl;
 DROP TABLE board_gallery;
 DROP TABLE board_cafe;
+DROP TABLE board_cafe_comment;
 DROP TABLE board_file;
 DROP SEQUENCE user_seq;
 DROP SEQUENCE board_gallery_seq;
 DROP SEQUENCE board_cafe_seq;
+DROP SEQUENCE board_cafe_comment_seq;
 DROP SEQUENCE board_file_seq; 
 
 CREATE TABLE user_tbl(
@@ -71,6 +75,20 @@ CREATE TABLE board_cafe (
 	regdate DATE
 );
 CREATE SEQUENCE board_cafe_seq;
+
+-- 댓글을 저장할 테이블
+CREATE TABLE board_cafe_comment (
+	num NUMBER PRIMARY KEY, 	-- 댓글의 글번호
+	writer VARCHAR2(100),		-- 댓글 작성자의 아이디
+	content VARCHAR2(500),		-- 댓글 내용
+	target_id VARCHAR2(100), 	-- 댓글의 당사자 아이디
+	ref_group NUMBER,			-- 원글의 글번호
+	comment_group NUMBER,		-- 댓글의 그룹번호
+	deleted CHAR(3) DEFAULT 'no',	-- 삭제된 댓글인 지 여부 'yes' or 'no'
+	regdate DATE
+);
+-- 댓글의 글번호를 얻어낼 시퀀스
+CREATE SEQUENCE board_cafe_comment_seq;
 
 -- 업로드된 파일의 정보를 저장할 테이블
 CREATE TABLE board_file(

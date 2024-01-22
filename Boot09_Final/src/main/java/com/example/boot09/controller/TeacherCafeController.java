@@ -5,12 +5,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import com.example.boot09.dto.CafeCommentDto;
 import com.example.boot09.dto.TeacherCafeDto;
 import com.example.boot09.service.TeacherCafeService;
 
 @Controller
 public class TeacherCafeController {
     @Autowired private TeacherCafeService service;
+    
+    @PostMapping("/teacher/cafe/comment_insert")
+    public String commentInsert(CafeCommentDto dto) {
+        // 댓글 저장 처리를 하고
+        service.saveComment(dto);
+        // 해당 글 자세히 보기로 리다이렉트
+        return "redirect:/teacher/cafe/detail?num=" + dto.getRef_group();
+    }
     
     @GetMapping("/teacher/cafe/updateform")
     public String updateform(Model model, int num) {

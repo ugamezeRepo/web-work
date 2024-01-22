@@ -1,6 +1,7 @@
 package com.example.boot09.service;
 
 import org.springframework.ui.Model;
+import com.example.boot09.dto.CafeCommentDto;
 import com.example.boot09.dto.TeacherCafeDto;
 
 public interface TeacherCafeService {
@@ -15,5 +16,6 @@ public interface TeacherCafeService {
     public void updateContent(TeacherCafeDto dto);
     
     public void deleteContent(int num);
-
+    
+    public void saveComment(CafeCommentDto dto);
 }

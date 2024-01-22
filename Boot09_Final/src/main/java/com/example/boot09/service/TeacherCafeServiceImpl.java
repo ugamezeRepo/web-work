@@ -5,13 +5,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import com.example.boot09.dto.CafeCommentDto;
 import com.example.boot09.dto.TeacherCafeDto;
 import com.example.boot09.exception.NotOwnerException;
+import com.example.boot09.repository.CafeCommentDao;
 import com.example.boot09.repository.TeacherCafeDao;
 
 @Service
 public class TeacherCafeServiceImpl implements TeacherCafeService {
     @Autowired private TeacherCafeDao dao;
+    @Autowired CafeCommentDao commentDao;
     //한 페이지에 글을 몇개씩 표시할 것인지
     final int PAGE_ROW_COUNT = 5;
     //하단 페이지 UI를 몇개씩 표시할 것인지
@@ -72,9 +75,18 @@ public class TeacherCafeServiceImpl implements TeacherCafeService {
         // userName 도 읽어와서 담아준다(로그인 되지 않았다면 null 이다)
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         
+        // 댓글 목록을 얻어온다.
+        // CafeDto에 ref_group 번호를 담아 dao에 전달하고 댓글 목록을 얻어낸다.
+        CafeCommentDto commentDto = new CafeCommentDto();
+        // 원글의 글번호를 담아서
+        commentDto.setRef_group(dto.getNum());
+        // 원글에 달린 댓글 목록 얻어내기
+        List<CafeCommentDto> commentList = commentDao.getList(commentDto);
+        
         // Model 객체에 담아준다.
         model.addAttribute("dto", resultDto);
         model.addAttribute("userName", userName);
+        model.addAttribute("commentList", commentList);
     }
     
     @Override
@@ -102,4 +114,22 @@ public class TeacherCafeServiceImpl implements TeacherCafeService {
         dao.update(dto);
     }
     
+    @Override
+    public void saveComment(CafeCommentDto dto) {
+        // 댓글 작성자를 SpringSecurity로부터 얻어내기
+        String writer = SecurityContextHolder.getContext().getAuthentication().getName();
+        // 글번호를 미리 얻어내기
+        int num = commentDao.getSequence();
+        dto.setWriter(writer);
+        dto.setNum(num);
+        // 만일 comment_group 번호가 넘어오지 않으면 원글의 댓글이다
+        if(dto.getComment_group() == 0) {
+            // 원글의 댓글인 경우 댓글의 번호(num)가 곧 comment_group 번호
+            dto.setComment_group(num);
+        }
+        // DB에 저장
+        commentDao.insert(dto);
+    }
+    
 }
+ 
