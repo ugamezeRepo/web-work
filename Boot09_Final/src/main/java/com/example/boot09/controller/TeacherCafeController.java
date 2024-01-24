@@ -1,10 +1,13 @@
 package com.example.boot09.controller;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.boot09.dto.CafeCommentDto;
 import com.example.boot09.dto.TeacherCafeDto;
 import com.example.boot09.service.TeacherCafeService;
@@ -12,6 +15,48 @@ import com.example.boot09.service.TeacherCafeService;
 @Controller
 public class TeacherCafeController {
     @Autowired private TeacherCafeService service;
+    
+    @GetMapping("/teacher/cafe/comment_list")
+    public String commentList(Model model, CafeCommentDto dto) {
+        service.getCommentList(model, dto);
+        
+        // templates/cafe/comment_list.html에서 댓글이 들어있는 여러 개의 li를 응답할 예정
+        return "teacher/cafe/comment_list";
+    }
+    
+    @ResponseBody
+    @PostMapping("/teacher/cafe/comment_update")
+    public Map<String, Object> commentUpdate(CafeCommentDto dto) {
+        service.updateComment(dto);
+        
+        Map<String, Object> map = new HashMap<>();
+        map.put("isSuccess", true);
+        map.put("num", dto.getNum());
+        map.put("content", dto.getContent());
+        
+        return map;
+    }
+    
+    /* 내가 한 거
+    @PostMapping("/teacher/cafe/comment_update")
+    public String commentUpdate(CafeCommentDto dto) {
+        service.updateComment(dto);
+        
+        return "redirect:/teacher/cafe/detail?num=" + dto.getRef_group();
+    }
+    */
+    
+    @ResponseBody // Map 객체를 리턴하면 json 문자열이 응답되도록 @ResponseBody 어노테이션 추가
+    @GetMapping("/teacher/cafe/comment_delete")    
+    public Map<String, Object> commentDelete(int num) {
+        // num은 GET방식 파라미터로 전달되는 삭제할 댓글의 번호
+        service.deleteComment(num);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("isSuccess", true);
+        
+        return map;
+    }
     
     @PostMapping("/teacher/cafe/comment_insert")
     public String commentInsert(CafeCommentDto dto) {

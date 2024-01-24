@@ -15,6 +15,7 @@ import com.example.boot09.repository.TeacherCafeDao;
 public class TeacherCafeServiceImpl implements TeacherCafeService {
     @Autowired private TeacherCafeDao dao;
     @Autowired CafeCommentDao commentDao;
+    // 글 페이징 처리
     //한 페이지에 글을 몇개씩 표시할 것인지
     final int PAGE_ROW_COUNT = 5;
     //하단 페이지 UI를 몇개씩 표시할 것인지
@@ -80,6 +81,22 @@ public class TeacherCafeServiceImpl implements TeacherCafeService {
         CafeCommentDto commentDto = new CafeCommentDto();
         // 원글의 글번호를 담아서
         commentDto.setRef_group(dto.getNum());
+        
+        // 요청된 댓글의 페이지 번호
+        int pageNum = 1;
+        
+        // [ 댓글 페이징 처리 관련 로직 ]
+        // 한 페이지에 댓글을 몇 개씩 표시할 것인 지
+        final int PAGE_ROW_COUNT = 10;
+        
+        // 보여줄 페이지의 시작 ROWNUM
+        int startRowNum = 1 + (pageNum - 1) * PAGE_ROW_COUNT;
+        // 보여줄 페이지의 끝 ROWNUM
+        int endRowNum = pageNum * PAGE_ROW_COUNT;
+        // 계산된 값을 dto에 담는다.
+        commentDto.setStartRowNum(startRowNum);
+        commentDto.setEndRowNum(endRowNum);
+        
         // 원글에 달린 댓글 목록 얻어내기
         List<CafeCommentDto> commentList = commentDao.getList(commentDto);
         
@@ -131,5 +148,56 @@ public class TeacherCafeServiceImpl implements TeacherCafeService {
         commentDao.insert(dto);
     }
     
+    @Override
+    public void updateComment(CafeCommentDto dto) {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        String writer = commentDao.getData(dto.getNum()).getWriter();
+        // String writer = dto.getTarget_id();
+        
+        if(!userName.equals(writer)) {
+            throw new NotOwnerException("댓글의 작성자가 아닙니다.");
+        }
+        
+        commentDao.update(dto);        
+    }
+    
+    @Override
+    public void deleteComment(int num) {
+        // 로그인된 사용자와 댓글 작성자가 같은 지 확인
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        String writer = commentDao.getData(num).getWriter();
+        
+        if(!userName.equals(writer)) {
+            throw new NotOwnerException("댓글의 작성자가 아닙니다.");
+        }
+        // 삭제 작업을 한다.
+        commentDao.delete(num);
+    }
+    
+    @Override
+    public void getCommentList(Model model, CafeCommentDto dto) {
+        // 요청된 댓글의 페이지 번호
+        int pageNum = dto.getPageNum();
+        
+        // [ 댓글 페이징 처리 관련 로직 ]
+        // 한 페이지에 댓글을 몇 개씩 표시할 것인 지
+        final int PAGE_ROW_COUNT = 10;
+        
+        // 보여줄 페이지의 시작 ROWNUM
+        int startRowNum = 1 + (pageNum - 1) * PAGE_ROW_COUNT;
+        // 보여줄 페이지의 끝 ROWNUM
+        int endRowNum = pageNum * PAGE_ROW_COUNT;
+        // 계산된 값을 dto에 담는다.
+        dto.setStartRowNum(startRowNum);
+        dto.setEndRowNum(endRowNum);
+        
+        // pageNum에 해당하는 페이지 목록만 select 되도록 한다.
+        List<CafeCommentDto> commentList = commentDao.getList(dto);
+        
+        // 응답에 필요한 데이터를 Model 객체에 담는다.
+        model.addAttribute("commentList", commentList);
+        model.addAttribute("pageNum", pageNum);
+        model.addAttribute("ref_group", dto.getRef_group());
+    }
 }
  

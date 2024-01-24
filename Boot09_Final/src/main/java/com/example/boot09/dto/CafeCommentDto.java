@@ -21,6 +21,8 @@ public class CafeCommentDto {
     private String deleted;
     private String regdate;
     private String profile;
-    private int startNum;
-    private int endNum;
+    // 페이징 처리를 위한 필드
+    private int startRowNum;
+    private int endRowNum;
+    private int pageNum;
 }

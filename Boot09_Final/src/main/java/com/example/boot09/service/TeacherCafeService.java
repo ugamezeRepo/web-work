@@ -9,7 +9,7 @@ public interface TeacherCafeService {
     
     public void getList(Model model, TeacherCafeDto dto);
     
-    public void getData(Model model, int num); // 글 수정 폼 출력 관련 기능
+    public void getData(Model model, int num); // 글 수정폼 출력 관련 기능
     
     public void getDetail(Model model, TeacherCafeDto dto); // 글 상세보기 관련 기능
     
@@ -18,4 +18,10 @@ public interface TeacherCafeService {
     public void deleteContent(int num);
     
     public void saveComment(CafeCommentDto dto);
+    
+    public void updateComment(CafeCommentDto dto);
+    
+    public void deleteComment(int num); 
+    
+    public void getCommentList(Model model, CafeCommentDto dto);
 }

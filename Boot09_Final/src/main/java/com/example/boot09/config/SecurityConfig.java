@@ -21,7 +21,8 @@ public class SecurityConfig {
 		String[] whiteList= {"/", "/user/signup_form", "/user/signup", 
 				"/user/loginform", "/user/login_fail", "/user/expired",
 				"/gallery/list", "/gallery/detail", "/upload/images/**",
-				"/cafe/list", "cafe/detail", "/teacher/cafe/list", "/teacher/cafe/detail",
+				"/cafe/list", "/cafe/detail", 
+				"/teacher/cafe/list", "/teacher/cafe/detail", "/teacher/cafe/comment_list",
 				"/file/list", "/file/detail", "/file/download",
 				"/teacher/file/list", "/teacher/file/detail", "/teacher/file/download"
 		};

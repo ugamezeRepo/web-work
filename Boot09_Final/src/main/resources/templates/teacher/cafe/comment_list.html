@@ -1,0 +1,5 @@
+<!-- /teacher/cafe/comment_list.html -->
+<!-- 댓글 목록을 이용해서 li 여러 개 출력하기 -->
+<li th:each="tmp: ${commentList}">
+	[[${tmp.content}]]
+</li>
