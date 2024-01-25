@@ -11,15 +11,27 @@ public class CafeCommentDaoImpl implements CafeCommentDao {
     @Autowired SqlSession session;
     
     @Override
+    public void insert(CafeCommentDto dto) {
+        session.insert("cafeComment.insert", dto);
+    }
+    
+    @Override
+    public int getCount(int ref_group) {
+
+        return session.selectOne("cafeComment.getCount", ref_group);
+    }
+    
+    @Override
     public int getSequence() {
         
         return session.selectOne("cafeComment.getSequence");
     }
     
     @Override
-    public void insert(CafeCommentDto dto) {
-        session.insert("cafeComment.insert", dto);
-    }
+    public CafeCommentDto getData(int num) {
+        
+        return session.selectOne("cafeComment.getData", num);
+    }    
     
     @Override
     public List<CafeCommentDto> getList(CafeCommentDto dto) {
@@ -35,12 +47,6 @@ public class CafeCommentDaoImpl implements CafeCommentDao {
     @Override
     public void delete(int num) {
         session.update("cafeComment.delete", num);
-    }
-    
-    @Override
-    public CafeCommentDto getData(int num) {
-        
-        return session.selectOne("cafeComment.getData", num);
     }
     
 }

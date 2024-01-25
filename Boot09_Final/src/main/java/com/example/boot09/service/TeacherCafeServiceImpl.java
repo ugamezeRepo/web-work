@@ -100,10 +100,16 @@ public class TeacherCafeServiceImpl implements TeacherCafeService {
         // 원글에 달린 댓글 목록 얻어내기
         List<CafeCommentDto> commentList = commentDao.getList(commentDto);
         
+        // 원글의 글번호를 이용해서 댓글의 전체 개수를 얻어낸다.
+        int totalRow = commentDao.getCount(dto.getNum());
+        // 댓글 전체 페이지의 개수
+        int totalPageCount =  totalRow == 0 ? 1 : (int)Math.ceil(totalRow / (double)PAGE_ROW_COUNT);
+        
         // Model 객체에 담아준다.
         model.addAttribute("dto", resultDto);
         model.addAttribute("userName", userName);
         model.addAttribute("commentList", commentList);
+        model.addAttribute("totalPageCount", totalPageCount);
     }
     
     @Override

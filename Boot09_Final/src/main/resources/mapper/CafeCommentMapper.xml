@@ -9,6 +9,12 @@
 			#{comment_group}, SYSDATE)
 	</insert>
 	
+	<select id="getCount" parameterType="int" resultType="int">
+		SELECT NVL(MAX(ROWNUM), 0) <!-- COALESCE(MAX(ROWNUM), 0) -->
+		FROM board_cafe_comment
+		WHERE ref_group=#{ref_group} 
+	</select>
+	
 	<!-- 저장 예정인 댓글의 글번호를 미리 얻어내기 -->
 	<select id="getSequence" resultType="int">
 		SELECT board_cafe_comment_seq.NEXTVAL

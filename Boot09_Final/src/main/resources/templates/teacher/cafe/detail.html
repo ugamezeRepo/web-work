@@ -176,7 +176,7 @@
 			<input type="hidden" name="ref_group" th:value="${dto.num}" />
 			<!-- 원글의 작성자가 댓글의 대상자가 된다. -->
 			<input type="hidden" name="target_id" th:value="${dto.writer}" />
-			<textarea name="content">[[${session.userName == null ? "댓글 작성을 위해 로그인이 필요합니다." : ""}]]</textarea>
+			<textarea name="content" th:placeholder="${session.userName == null ? '댓글 작성을 위해 로그인이 필요합니다.' : '댓글을 작성해주세요.'}"></textarea>
 			<button type="submit">등록</button>
 		</form>
 		
@@ -266,18 +266,30 @@
 	</div>
 	
 	<script>
+		// 클라이언트가 로그인 했는 지 여부를 Javascript 변수에 담아놓고 필요한 처리를 한다.
+		const isLogin = [[${session.userName} ne null]];
+
+		document.querySelector(".comment-form").addEventListener("submit", e => {
+			if (!isLogin) {
+				e.preventDefault(); // 폼 전송 막기
+				alert("로그인이 필요합니다.");
+				location.href = "[[@{/}]]user/loginform";
+			}
+		});
+		
 		// 댓글의 현재 페이지 번호를 관리할 변수를 만들고 초기값 1 대입
 		let currentPage = 1;
 		// 마지막 페이지는 totalPageCount이다.
-		// let lastPage = [[${totalPageCount}]];
-		let lastPage = 10;
-		
-	// let lastPage2 = ${totalPageCount};
-	// console.log(lastPage2);
-		
+		let lastPage = [[${totalPageCount}]];
 		// 추가로 댓글을 요청하고 그 작업이 끝났는 지 여부를 관리할 변수
 		let isLoading = false; // 현재 로딩 중인 지 여부
-		
+
+		// detail 페이지 로딩 시점에 만들어진 1페이지에 해당하는 댓글에 이벤트 리스너 등록하기
+		addUpdateFormListener(".update-form");
+		addUpdateListener(".update-link");
+		addDeleteListener(".delete-link");
+		addReplyListener(".reply-link");
+				
 		// 스크롤 이벤트가 일어났을 때 호출되는 함수 등록
 		window.addEventListener("scroll", _ => {
 			// 바닥까지 스크롤 했는 지 여부
@@ -286,6 +298,8 @@
 			let isLast = currentPage == lastPage;
 			// 현재 바닥까지 스크롤 했고 로딩 중이 아니고 현재 페이지가 마지막이 아니라면
 			if (isBottom && !isLoading && !isLast) {
+				// 로딩 중이라고 표시
+				isLoading = true;
 				// 로딩 바를 띄우고
 				document.querySelector(".loader").style.display = "block";
 				// 페이지 1 증가
@@ -296,151 +310,175 @@
 				.then(res => res.text())
 				.then(data => {
 					// data는 댓글이 출력된 li가 여러 개 들어있는 html 형식의 문자열
-				})
-				.catch(error => {
+					console.log(data);
+					// html 형식의 문자열을 댓글 출력하는 ul의 아래쪽에 html로 해석하면서 끼워넣기
+					document.querySelector(".comments ul").insertAdjacentHTML("beforeend", data);
 					
-				});
+					// 새로 추가된 댓글 li 요소 안에 있는 a 요소를 찾아서 이벤트 리스너 등록 하기 
+					addUpdateListener(".page-" + currentPage + " .update-link");
+					addDeleteListener(".page-" + currentPage + " .delete-link");
+					addReplyListener(".page-" + currentPage + " .reply-link");
+					addUpdateFormListener(".page-" + currentPage + " .update-form");
+					
+					// 로딩이 끝났다고 표시한다.
+					isLoading = false;
+					// 로딩바 숨기기
+					document.querySelector(".loader").style.display="none";
+				})
 				// 응답이 오면 응답된 내용을 댓글 목록에 append 한다.
 				
 			}
 		})
 		
-		// 수정폼 제출에 대한 처리
-		const updateForms = document.querySelectorAll(".update-form");
-		updateForms.forEach(item => {
-			item.addEventListener("submit", e => {
-				// 폼 제출을 막은 다음
-				e.preventDefault();
-				// submit 이벤트가 일어난 for의 참조값을 for이라는 변수에 담기
-				const form = e.target;
-				// 폼의 action 속성 value 얻어오기
-				const url = form.getAttribute("action");
-				// 폼에 입력된 전송할 내용을 query 문자열 형식으로 얻어내기
-				// num=xxx&content=xxx 요론 식으루 
-				const queryString = new URLSearchParams(new FormData(form)).toString();
-				
-				fetch(url, {
-					method: "POST",
-					headers: {"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"},
-					body: queryString,
-				})
-				.then(res => res.json())
-				.then(data => {
-					if (data.isSuccess) {
-						// data.num은 수정한 댓글번호
-						// data.content는 수정한 글의 내용
-						// 실제 출력된 content 수정
-						document.querySelector("#content" + data.num).innerText = data.content;				
-						// 폼을 숨기고
-						form.style.display = "none";
-						// 링크 내용 수정
-						// document.querySelector('.update-link[data-num="' + data.num + '"]')
-						document.querySelector(`.update-link[data-num="${data.num}"]`)
-								.innerText = "수정1";
-					}
-				})
-				.catch(err => {
+		// 인자로 전달되는 선택자를 이용해서 이벤트 리스너를 등록하는 함수
+		function addUpdateFormListener(selector) {
+			// 수정폼 제출에 대한 처리
+			const updateForms = document.querySelectorAll(selector);
+			updateForms.forEach(item => {
+				item.addEventListener("submit", e => {
+					// 폼 제출을 막은 다음
+					e.preventDefault();
+					// submit 이벤트가 일어난 for의 참조값을 for이라는 변수에 담기
+					const form = e.target;
+					// 폼의 action 속성 value 얻어오기
+					const url = form.getAttribute("action");
+					// 폼에 입력된 전송할 내용을 query 문자열 형식으로 얻어내기
+					// num=xxx&content=xxx 요론 식으루 
+					const queryString = new URLSearchParams(new FormData(form)).toString();
+					
+					fetch(url, {
+						method: "POST",
+						headers: {"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"},
+						body: queryString,
+					})
+					.then(res => res.json())
+					.then(data => {
+						if (data.isSuccess) {
+							// data.num은 수정한 댓글번호
+							// data.content는 수정한 글의 내용
+							// 실제 출력된 content 수정
+							document.querySelector("#content" + data.num).innerText = data.content;				
+							// 폼을 숨기고
+							form.style.display = "none";
+							// 링크 내용 수정
+							// document.querySelector('.update-link[data-num="' + data.num + '"]')
+							document.querySelector(`.update-link[data-num="${data.num}"]`)
+									.innerText = "수정";
+						}
+					})
+					.catch(err => {
+						console.log("에러났네여~");
+					});
 					
 				});
-				
-			});
-		});
-		
-		// 수정 링크에 대한 처리
-		const updateLinks = document.querySelectorAll(".update-link");
-		for (let i = 0; i < updateLinks.length; i++) {
-			updateLinks[i].addEventListener("click", e => {
-				// 클릭한 a 요소의 data-num 속성의 value 값을 읽어온다. (삭제할 댓글의 번호)
-				const num = e.target.getAttribute("data-num");
-				// 보여주거나 숨길 form의 참조값 얻어내기
-				const form = document.querySelector("#updateForm" + num);
-				const currentText = e.target.innerText;
-				if (currentText === "수정") {
-					// 보이게 하기
-					form.style.display = "flex";
-					e.target.innerText = "수정취소";
-				} else if (currentText === "수정취소") {
-					form.style.display = "none";
-					e.target.innerText = "수정";				
-				}
 			});
 		}
 		
-		
-		/* 내가 한 거
-		const updateLinks = document.querySelectorAll(".update-link");
-		updateLinks.forEach(item => {
-			item.addEventListener("click", e=> {
-				const num = e.target.getAttribute("data-num");
-				const form = document.querySelector("#upForm" + num);
-				const currentText = e.target.innerText;
-				const upBtn = document.querySelector("#upBtn");
-				
-				if (currentText === "수정") {
-					form.style.display = "flex";
-					e.target.innerText = "취소";
-				} else if (currentText === "취소") {
-					form.style.display = "none";
-					e.target.innerText = "수정";				
-				}
-			});
-		});
-		*/
-		
-		// 삭제 링크에 대한 처리
-		const deleteLinks = document.querySelectorAll(".delete-link");
-		deleteLinks.forEach(item => {
-			item.addEventListener("click", e=> {
-				// 클릭한 a 요소의 data-num 속성의 value 값을 읽어온다. (삭제할 댓글의 번호)
-				const num = e.target.getAttribute("data-num");
-				fetch("[[@{/teacher/cafe/comment_delete}]]" + "?num=" + num)
-				.then(res => res.json())
-				.then(data => {
-					if(data.isSuccess) {
-						// 댓글이 있었던 곳에 "삭제된 댓글입니다." 출력
-						document.querySelector("#reli" + num).innerHTML = "<p>삭제된 댓글입니다.</p>"
+		function addUpdateListener(selector) {
+			// 수정 링크에 대한 처리
+			const updateLinks = document.querySelectorAll(selector);
+			for (let i = 0; i < updateLinks.length; i++) {
+				updateLinks[i].addEventListener("click", e => {
+					// 클릭한 a 요소의 data-num 속성의 value 값을 읽어온다. (삭제할 댓글의 번호)
+					const num = e.target.getAttribute("data-num");
+					// 보여주거나 숨길 form의 참조값 얻어내기
+					const form = document.querySelector("#updateForm" + num);
+					const currentText = e.target.innerText;
+					if (currentText === "수정") {
+						// 보이게 하기
+						form.style.display = "flex";
+						e.target.innerText = "수정취소";
+					} else if (currentText === "수정취소") {
+						form.style.display = "none";
+						e.target.innerText = "수정";				
 					}
-				})
-				.catch(error => {
-					console.log(error);
+				});
+			}
+			
+			/* 내가 한 거
+				const updateLinks = document.querySelectorAll(".update-link");
+				updateLinks.forEach(item => {
+					item.addEventListener("click", e=> {
+						const num = e.target.getAttribute("data-num");
+						const form = document.querySelector("#upForm" + num);
+						const currentText = e.target.innerText;
+						const upBtn = document.querySelector("#upBtn");
+						
+						if (currentText === "수정") {
+							form.style.display = "flex";
+							e.target.innerText = "취소";
+						} else if (currentText === "취소") {
+							form.style.display = "none";
+							e.target.innerText = "수정";				
+						}
+					});
+				});
+			*/
+		}
+		
+		function addDeleteListener(selector) {
+			// 삭제 링크에 대한 처리
+			const deleteLinks = document.querySelectorAll(selector);
+			deleteLinks.forEach(item => {
+				item.addEventListener("click", e=> {
+					// 클릭한 a 요소의 data-num 속성의 value 값을 읽어온다. (삭제할 댓글의 번호)
+					const num = e.target.getAttribute("data-num");
+					fetch("[[@{/teacher/cafe/comment_delete}]]" + "?num=" + num)
+					.then(res => res.json())
+					.then(data => {
+						if(data.isSuccess) {
+							// 댓글이 있었던 곳에 "삭제된 댓글입니다." 출력
+							document.querySelector("#reli" + num).innerHTML = "<p>삭제된 댓글입니다.</p>"
+						}
+					})
+					.catch(error => {
+						console.log(error);
+					});
 				});
 			});
-		});
+		}
 		
-		// 답글 링크에 대한 처리
-		const replyLinks = document.querySelectorAll(".reply-link");
-		// 반복문 돌면서 모든 링크에 이벤트 리스너 함수 등록
-		replyLinks.forEach(item => {
-			item.addEventListener("click", e => {
-				// 클릭한 a 요소의 data-num 속성의 value 값을 읽어온다.
-				const num = e.target.getAttribute("data-num");
-				// 보여주거나 숨길 form의 참조값 얻어내기
-				const form = document.querySelector("#reForm" + num);
-				// 눌러진 링크의 innerText 읽어오기
-				const currentText = e.target.innerText;
-				
-				if (currentText === "답글") {
-					// 보이게 하기
-					form.style.display = "flex";
-					e.target.innerText = "취소";
-				} else if (currentText === "취소") {
-					form.style.display = "none";
-					e.target.innerText = "답글";					
-				}
-				
-				
-				/*
-					if (currentText.includes("취소")) {
-					form.style.display = "none";
-					e.target.innerText = "답글";
-				} else if (currentText.includes("답글")) {
-					// 보이게 하기
-					form.style.display = "flex";
-					e.target.innerText = "취소";
-				}
-				*/
+		function addReplyListener(selector) {
+			// 답글 링크에 대한 처리
+			const replyLinks = document.querySelectorAll(".reply-link");
+			// 반복문 돌면서 모든 링크에 이벤트 리스너 함수 등록
+			replyLinks.forEach(item => {
+				item.addEventListener("click", e => {
+						if (!isLogin) {
+							e.preventDefault(); // 폼 전송 막기
+							alert("로그인이 필요합니다.");
+							location.href = "[[@{/}]]user/loginform";
+						}
+
+					// 클릭한 a 요소의 data-num 속성의 value 값을 읽어온다.
+					const num = e.target.getAttribute("data-num");
+					// 보여주거나 숨길 form의 참조값 얻어내기
+					const form = document.querySelector("#reForm" + num);
+					// 눌러진 링크의 innerText 읽어오기
+					const currentText = e.target.innerText;
+					
+					if (currentText === "답글") {
+						// 보이게 하기
+						form.style.display = "flex";
+						e.target.innerText = "취소";
+					} else if (currentText === "취소") {
+						form.style.display = "none";
+						e.target.innerText = "답글";					
+					}
+					
+					/*
+						if (currentText.includes("취소")) {
+							form.style.display = "none";
+							e.target.innerText = "답글";
+						} else if (currentText.includes("답글")) {
+							// 보이게 하기
+							form.style.display = "flex";
+							e.target.innerText = "취소";
+						}
+					*/
+				});
 			});
-		});
+		}
 	</script>
 </body>
 </html>

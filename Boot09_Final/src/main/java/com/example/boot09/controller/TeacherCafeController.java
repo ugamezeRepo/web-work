@@ -20,6 +20,12 @@ public class TeacherCafeController {
     public String commentList(Model model, CafeCommentDto dto) {
         service.getCommentList(model, dto);
         
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
         // templates/cafe/comment_list.html에서 댓글이 들어있는 여러 개의 li를 응답할 예정
         return "teacher/cafe/comment_list";
     }
