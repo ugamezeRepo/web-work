@@ -1,0 +1,6 @@
+jwt:
+  secret: myJwtSecretKey	# Jwt token secret key
+  expiration: 3600000	# Jwt token expiration ms
+  name: jwtToken	# jwt token cookie name
+  cookie:
+    expiration: 3600	# jwt token cookie expiration sec 
