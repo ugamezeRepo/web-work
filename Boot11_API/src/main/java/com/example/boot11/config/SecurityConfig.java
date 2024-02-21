@@ -1,5 +1,6 @@
 package com.example.boot11.config;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -20,57 +21,45 @@ import com.example.boot11.filter.JwtFilter;
 @Configuration // 설정 클래스라고 알려준다
 @EnableWebSecurity // Security 를 설정하기 위한 어노테이션
 public class SecurityConfig {
-    @Value ("${jwt.name}")
+    @Value("${jwt.name}")
     private String jwtName;
     @Autowired
     private JwtFilter jwtFilter;
-	
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
-        return httpSecurity
-		.csrf(csrf -> csrf.disable())
-		.authorizeHttpRequests(config -> 
-			config
-				.requestMatchers("/auth").permitAll()
-				.requestMatchers("/admin/**").hasRole("ADMIN")
-				.requestMatchers("/staff/**").hasAnyRole("ADMIN", "STAFF")
-				.anyRequest().authenticated()
-		)
-		.sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-		.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-		.build();
-	}
-	
-	@Bean
-	PasswordEncoder passwordEncoder() { 
-		return new BCryptPasswordEncoder();
-	}
+    
+    private String[] whiteList = {
+            "/", "/error", "/auth", "/index.html", "/notice", "/favicon.ico", "manifest.json", "/static/**"
+    };
 
-	@Bean
-	AuthenticationManager authenticationManager(HttpSecurity http, 
-			BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailsService userDetailService) throws Exception {
-	    
-		return http.getSharedObject(AuthenticationManagerBuilder.class) 
-	      .userDetailsService(userDetailService)
-	      .passwordEncoder(bCryptPasswordEncoder)
-	      .and()
-	      .build();
-	}
-	
-	@Bean
-	CookieRequestCache getCookieRequestCache() {
-	    return new CookieRequestCache();
-	}
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity.csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(config -> config
+                        .requestMatchers(whiteList).permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/staff/**").hasAnyRole("ADMIN", "STAFF")
+                        .anyRequest().authenticated())
+                .sessionManagement(config -> config
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class).build();
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailsService userDetailService) throws Exception {
+
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .userDetailsService(userDetailService).passwordEncoder(bCryptPasswordEncoder).and()
+                .build();
+    }
+
+    @Bean
+    CookieRequestCache getCookieRequestCache() {
+        return new CookieRequestCache();
+    }
 }
-
-
-
-
-
-
-
-
-
-
 
 
