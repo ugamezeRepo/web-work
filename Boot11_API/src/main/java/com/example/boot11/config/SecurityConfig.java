@@ -27,7 +27,8 @@ public class SecurityConfig {
     private JwtFilter jwtFilter;
     
     private String[] whiteList = {
-            "/", "/error", "/auth", "/index.html", "/notice", "/favicon.ico", "manifest.json", "/static/**"
+            "/", "/error", "/auth", "/index.html", "/notice", "/favicon.ico", "manifest.json", "/static/**", 
+            "/upload/images/**", "/image/**", "/file/**"
     };
 
     @Bean
